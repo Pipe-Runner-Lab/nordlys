@@ -8,7 +8,7 @@ function Park(): JSX.Element {
 
   return (
     <group position={[0, -1.45, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-      <mesh>
+      <mesh receiveShadow>
         <planeBufferGeometry args={[10, 10]} />
         <meshStandardMaterial map={parkTexture} />
       </mesh>

@@ -7,15 +7,17 @@ function Terrain({ editorMarkRef }: { editorMarkRef: React.RefObject<Group> }): 
 
   return (
     <mesh
+      receiveShadow
       onPointerMove={(e) => {
         if (editorMarkRef.current !== null) {
-          editorMarkRef.current.position.set(e.point.x, e.point.y, e.point.z);
+          editorMarkRef.current.position.setX(e.point.x);
+          editorMarkRef.current.position.setZ(e.point.z);
         }
       }}
       position={[0, -1.5, 0]}
       rotation={[-Math.PI / 2, 0, 0]}>
       <planeBufferGeometry args={[50, 50]} />
-      <meshStandardMaterial color="#393E46" roughness={roughness} />
+      <meshStandardMaterial color="#fff" roughness={roughness} />
     </mesh>
   );
 }

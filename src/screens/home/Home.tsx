@@ -5,11 +5,13 @@ import Gizmo from '../../objects/gizmo';
 import Controls from '../../objects/controls';
 import Scene from '../../objects/scene';
 import EditorPanel from '../../components/editor-panel';
+import { PerspectiveCamera } from '@react-three/drei';
 
 function Home(): JSX.Element {
   return (
     <div id="canvas-container" className="relative w-full h-full">
-      <Canvas camera={{ position: [-15, 15, 18], fov: 35 }}>
+      <Canvas shadows>
+        <PerspectiveCamera position={[45, 26, 45]} fov={35} far={250} near={1} makeDefault />
         <Lights />
         <Scene />
 

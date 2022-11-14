@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Environment } from '@react-three/drei';
+// import { Environment } from '@react-three/drei';
 import Buildings from '../buildings';
 import Terrain from '../terrain';
 import Park from '../park';
@@ -15,7 +15,7 @@ function Scene(): JSX.Element {
       {/* <fog attach="fog" args={['#fff', 30, 40]} /> */}
       <EditorMark ref={editorMarkRef} />
 
-      <Environment preset="city" />
+      {/* <Environment preset="city" /> */}
       <Buildings />
       <Park />
       <Terrain editorMarkRef={editorMarkRef} />
