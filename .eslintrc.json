@@ -17,7 +17,8 @@
   },
   "plugins": ["react"],
   "rules": {
-    "react/react-in-jsx-scope": "error"
+    "react/react-in-jsx-scope": "error",
+    "react/no-unknown-property": [0]
   },
   "settings": {
     "react": {
