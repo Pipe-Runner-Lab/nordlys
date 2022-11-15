@@ -5,7 +5,7 @@ import Terrain from '../terrain';
 import Park from '../park';
 import { Group } from 'three';
 import { useControls } from 'leva';
-import { Physics } from '@react-three/cannon';
+// import { Physics } from '@react-three/cannon';
 
 function Scene(): JSX.Element {
   const { baseHeight } = useControls('Terrain', { baseHeight: { value: -1.5, min: -3, max: 3 } });
@@ -13,15 +13,15 @@ function Scene(): JSX.Element {
 
   return (
     <>
-      <color attach="background" args={['#fff']} />
+      <color attach="background" args={['cyan']} />
       {/* <fog attach="fog" args={['#fff', 30, 40]} /> */}
 
       {/* <Environment preset="city" /> */}
-      <Physics>
-        <Buildings baseHeight={baseHeight} />
-        <Park />
-        <Terrain height={baseHeight} ref={baseRef} />
-      </Physics>
+      {/* <Physics> */}
+      <Buildings baseHeight={baseHeight} />
+      <Park />
+      <Terrain height={baseHeight} ref={baseRef} />
+      {/* </Physics> */}
     </>
   );
 }
