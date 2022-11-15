@@ -18,7 +18,13 @@
   "plugins": ["react"],
   "rules": {
     "react/react-in-jsx-scope": "error",
-    "react/no-unknown-property": [0]
+    "react/no-unknown-property": [0],
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ]
   },
   "settings": {
     "react": {
