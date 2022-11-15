@@ -3,7 +3,7 @@ import { useControls } from 'leva';
 import React, { forwardRef, useCallback, useEffect, useRef } from 'react';
 import { Group } from 'three';
 import useStore from '../../store';
-import EditorMark from '../EeditorMark';
+import EditorMark from '../EditorMark';
 
 interface TerrainProps {
   height: number;
