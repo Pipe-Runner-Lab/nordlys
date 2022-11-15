@@ -1,0 +1,70 @@
+import React from 'react';
+import { BsBuilding as BuildingIcon } from 'react-icons/bs';
+import {
+  GiTempleGate as LandMarkIcon,
+  GiStripedSun as SkyExposureIcon,
+  GiTwoShadows as ShadowIcon
+} from 'react-icons/gi';
+
+import { VscChromeClose as CloseIcon } from 'react-icons/vsc';
+import { clsx as cx } from 'clsx';
+import useStore from '../../../store';
+
+function PrimaryHeader(): JSX.Element {
+  const editMode = useStore((state) => state.editMode);
+  const setIsMenuOpen = useStore((state) => state.setIsMenuOpen);
+
+  return (
+    <div className="flex justify-between w-full">
+      <div className="flex space-x-2">
+        <button
+          className={cx(
+            'flex items-center justify-center w-10 h-10  rounded-full outline -outline-offset-1 outline-1',
+            editMode === 'buildings' ? 'outline-sky-400 bg-sky-100' : 'outline-gray-300'
+          )}>
+          <BuildingIcon
+            size={18}
+            className={cx(editMode === 'buildings' ? 'fill-sky-500' : 'fill-gray-400')}
+          />
+        </button>
+        <button
+          className={cx(
+            'flex items-center justify-center w-10 h-10  rounded-full outline -outline-offset-1 outline-1',
+            editMode === 'shadow' ? 'outline-sky-400 bg-sky-100' : 'outline-gray-300'
+          )}>
+          <ShadowIcon
+            size={18}
+            className={cx(editMode === 'shadow' ? 'fill-sky-500' : 'fill-gray-400')}
+          />
+        </button>
+        <button
+          className={cx(
+            'flex items-center justify-center w-10 h-10  rounded-full outline -outline-offset-1 outline-1',
+            editMode === 'landmark' ? 'outline-sky-400 bg-sky-100' : 'outline-gray-300'
+          )}>
+          <LandMarkIcon
+            size={18}
+            className={cx(editMode === 'landmark' ? 'fill-sky-500' : 'fill-gray-400')}
+          />
+        </button>
+        <button
+          className={cx(
+            'flex items-center justify-center w-10 h-10  rounded-full outline -outline-offset-1 outline-1',
+            editMode === 'sky-exposure' ? 'outline-sky-400 bg-sky-100' : 'outline-gray-300'
+          )}>
+          <SkyExposureIcon
+            size={18}
+            className={cx(editMode === 'sky-exposure' ? 'fill-sky-500' : 'fill-gray-400')}
+          />
+        </button>
+      </div>
+      <button
+        className="flex items-center justify-center w-10 h-10 bg-red-300 rounded-md shadow-lg"
+        onClick={() => setIsMenuOpen(false)}>
+        <CloseIcon size={26} />
+      </button>
+    </div>
+  );
+}
+
+export default PrimaryHeader;

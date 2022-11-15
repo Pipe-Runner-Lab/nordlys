@@ -2,7 +2,8 @@ import create from 'zustand';
 
 type BuildingType = 'apartment' | 'office';
 
-type EditModes = 'buildings' | 'landmark' | 'sky-exposure' | undefined;
+type EditModes = 'buildings' | 'landmark' | 'sky-exposure' | 'shadow';
+type BuildingEditorMode = 'insert' | undefined;
 
 interface Building {
   id: string;
@@ -19,6 +20,13 @@ interface Store {
   setEditMode: (mode: EditModes) => void;
   editorMarkType: BuildingType;
   setEditorMarkType: (type: BuildingType) => void;
+  isMenuOpen: boolean;
+  setIsMenuOpen: (isOpen: boolean) => void;
+  buildingEditorMode: BuildingEditorMode;
+  setBuildingEditorMode: (mode: BuildingEditorMode) => void;
+  selectedBuildingIds: string[];
+  setSelectedBuildingIds: (ids: string[]) => void;
+  clearSelectedBuildingIds: () => void;
 }
 
 const useStore = create<Store>((set) => ({
@@ -29,7 +37,14 @@ const useStore = create<Store>((set) => ({
   editMode: 'buildings',
   setEditMode: (mode) => set({ editMode: mode }),
   editorMarkType: 'apartment',
-  setEditorMarkType: (type) => set({ editorMarkType: type })
+  setEditorMarkType: (type) => set({ editorMarkType: type }),
+  isMenuOpen: false,
+  setIsMenuOpen: (isOpen) => set({ isMenuOpen: isOpen }),
+  buildingEditorMode: undefined,
+  setBuildingEditorMode: (mode) => set({ buildingEditorMode: mode }),
+  selectedBuildingIds: [],
+  setSelectedBuildingIds: (ids) => set({ selectedBuildingIds: ids }),
+  clearSelectedBuildingIds: () => set({ selectedBuildingIds: [] })
 }));
 
 export default useStore;

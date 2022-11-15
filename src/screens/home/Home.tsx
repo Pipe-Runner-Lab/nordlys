@@ -9,7 +9,7 @@ import { PerspectiveCamera } from '@react-three/drei';
 
 function Home(): JSX.Element {
   return (
-    <div id="canvas-container" className="relative w-full h-full">
+    <div id="canvas-container" className="relative w-full h-full overflow-hidden">
       <Canvas shadows>
         <PerspectiveCamera position={[45, 26, 45]} fov={35} far={500} near={1} makeDefault />
         <Lights />

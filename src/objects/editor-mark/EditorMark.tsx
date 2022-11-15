@@ -23,7 +23,7 @@ function EditorMark({ baseHeight }: EditorMarkProps, ref?: React.Ref<Group>): JS
   }, [editorMarkType]);
 
   return (
-    <group ref={ref} position={[0, baseHeight, 0]}>
+    <group visible={false} ref={ref} position={[0, baseHeight, 0]}>
       <MarkComponent />
     </group>
   );
