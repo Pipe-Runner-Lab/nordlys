@@ -1,10 +1,10 @@
 import React from 'react';
 import { Canvas } from '@react-three/fiber';
-import Lights from '../../objects/lights';
-import Gizmo from '../../objects/gizmo';
-import Controls from '../../objects/controls';
-import Scene from '../../objects/scene';
-import EditorPanel from '../../components/editor-panel';
+import Lights from '../../objects/Lights';
+import Gizmo from '../../objects/Gizmo';
+import Controls from '../../objects/Controls';
+import Scene from '../../objects/Scene';
+import EditorPanel from '../../components/EditorPanel';
 import { PerspectiveCamera } from '@react-three/drei';
 
 function Home(): JSX.Element {

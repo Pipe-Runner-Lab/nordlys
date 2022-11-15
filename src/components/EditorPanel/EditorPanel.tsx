@@ -3,7 +3,7 @@ import React from 'react';
 import useStore from '../../store';
 import { HiOutlineMenu as OpenIcon } from 'react-icons/hi';
 import PrimaryHeader from './components/PrimaryHeader';
-import BuildingPanel from '../building-panel';
+import BuildingPanel from '../BuildingPanel';
 
 const menuVariants = {
   open: {

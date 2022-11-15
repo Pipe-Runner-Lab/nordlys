@@ -1,5 +1,5 @@
 import React from 'react';
-import Home from './screens/home/Home';
+import Home from './screens/Home';
 import { Leva } from 'leva';
 
 function App(): JSX.Element {

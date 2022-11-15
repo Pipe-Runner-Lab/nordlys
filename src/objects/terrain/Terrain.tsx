@@ -3,7 +3,7 @@ import { useControls } from 'leva';
 import React, { forwardRef, useCallback, useEffect, useRef } from 'react';
 import { Group } from 'three';
 import useStore from '../../store';
-import EditorMark from '../editor-mark';
+import EditorMark from '../EeditorMark';
 
 interface TerrainProps {
   height: number;
@@ -43,16 +43,19 @@ function Terrain({ height }: TerrainProps, ref: React.Ref<Group>): JSX.Element {
     editorMarkRef.current?.position.setZ(z);
   }, []);
 
-  const handleClick = useCallback((event: ThreeEvent<MouseEvent>) => {
-    const {
-      point: { x, z }
-    } = event;
-    editorMarkRef.current?.position.setX(x);
-    editorMarkRef.current?.position.setZ(z);
-    addBuilding({ x, z, type: editorMarkType, id: `${x}-${z}-${editorMarkType}` });
-  }, []);
+  const handleClick = useCallback(
+    (event: ThreeEvent<MouseEvent>) => {
+      const {
+        point: { x, z }
+      } = event;
+      editorMarkRef.current?.position.setX(x);
+      editorMarkRef.current?.position.setZ(z);
+      addBuilding({ x, z, type: editorMarkType, id: `${x}-${z}-${editorMarkType}` });
+    },
+    [editorMarkType]
+  );
 
-  const handlePointerOut = useCallback((event: ThreeEvent<MouseEvent>) => {
+  const handlePointerOut = useCallback(() => {
     if (editorMarkRef.current != null) {
       editorMarkRef.current.visible = false;
     }

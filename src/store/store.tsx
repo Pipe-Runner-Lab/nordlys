@@ -1,6 +1,6 @@
 import create from 'zustand';
 
-type BuildingType = 'apartment' | 'office';
+export type BuildingType = 'apartment' | 'office';
 
 type EditModes = 'buildings' | 'landmark' | 'sky-exposure' | 'shadow';
 type BuildingEditorMode = 'insert' | undefined;
@@ -39,7 +39,11 @@ const useStore = create<Store>((set) => ({
   editorMarkType: 'apartment',
   setEditorMarkType: (type) => set({ editorMarkType: type }),
   isMenuOpen: false,
-  setIsMenuOpen: (isOpen) => set({ isMenuOpen: isOpen }),
+  // * We reset everything when we close the menu
+  setIsMenuOpen: (isOpen) =>
+    isOpen
+      ? set({ isMenuOpen: isOpen })
+      : set({ isMenuOpen: isOpen, selectedBuildingIds: [], buildingEditorMode: undefined }),
   buildingEditorMode: undefined,
   setBuildingEditorMode: (mode) => set({ buildingEditorMode: mode }),
   selectedBuildingIds: [],

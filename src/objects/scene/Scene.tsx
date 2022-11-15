@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
 // import { Environment } from '@react-three/drei';
 import Buildings from '../buildings';
-import Terrain from '../terrain';
-import Park from '../park';
+import Terrain from '../Terrain';
+import Park from '../Park';
 import { Group } from 'three';
 import { useControls } from 'leva';
 // import { Physics } from '@react-three/cannon';
