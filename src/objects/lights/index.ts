@@ -1,1 +1,1 @@
-export { default } from './lights';
+export { default } from './Lights';

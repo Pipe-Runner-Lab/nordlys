@@ -1,18 +1,27 @@
 import React from 'react';
+import useStore from '../../store';
+import BuildingA from './components/BuildingA';
+import BuildingB from './components/BuildingB';
 
-function Buildings(): JSX.Element {
-  const height = -0.5;
+interface BuildingsProps {
+  baseHeight: number;
+}
+
+function Buildings({ baseHeight }: BuildingsProps): JSX.Element | null {
+  const buildingMap = useStore((state) => state.buildingMap);
 
   return (
-    <group>
-      <mesh castShadow position={[1, height, 1]}>
-        <boxBufferGeometry attach="geometry" args={[1, 1, 1]} />
-        <meshStandardMaterial attach="material" color="blue" />
-      </mesh>
-      <mesh castShadow position={[2, height, 2]}>
-        <boxBufferGeometry attach="geometry" args={[1, 1, 1]} />
-        <meshStandardMaterial attach="material" color="green" />
-      </mesh>
+    <group position-y={baseHeight}>
+      {buildingMap.map(({ type, id, x, z }) => {
+        switch (type) {
+          case 'apartment':
+            return <BuildingA key={id} x={x} z={z} />;
+          case 'office':
+            return <BuildingB key={id} x={x} z={z} />;
+          default:
+            return null;
+        }
+      })}
     </group>
   );
 }

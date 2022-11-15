@@ -11,7 +11,7 @@ function Home(): JSX.Element {
   return (
     <div id="canvas-container" className="relative w-full h-full">
       <Canvas shadows>
-        <PerspectiveCamera position={[45, 26, 45]} fov={35} far={250} near={1} makeDefault />
+        <PerspectiveCamera position={[45, 26, 45]} fov={35} far={500} near={1} makeDefault />
         <Lights />
         <Scene />
 
