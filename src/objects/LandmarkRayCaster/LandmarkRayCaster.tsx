@@ -1,24 +1,39 @@
 import React, { useRef, useEffect, useMemo } from 'react';
 import useStore from '../../store/store';
-import { Raycaster, Group, Object3D } from 'three';
+import { Raycaster, Group, Object3D, Vector3 } from 'three';
 
 interface LandmarkRayCasterProps {
   buildingsRef: React.RefObject<Group>;
+  selectedBuildingIds: string[];
+  debug: boolean;
 }
 
-function LandmarkRayCaster({ buildingsRef }: LandmarkRayCasterProps): JSX.Element {
-  const selectedBuildingIds = useStore((state) => state.selectedBuildingIds);
+function LandmarkRayCaster({
+  buildingsRef,
+  selectedBuildingIds,
+  debug
+}: LandmarkRayCasterProps): JSX.Element | null {
   const buildingMap = useStore((state) => state.buildingMap);
 
-  const raycasterRef = useRef<Raycaster>(null);
+  const height = 10;
 
-  if (selectedBuildingIds.length !== 1) {
-    throw new Error('One and only one landmark can be selected');
-  }
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const raycasterRef = useRef<Raycaster>(null!);
 
-  const landmark = buildingMap.find((building) => building.id === selectedBuildingIds[0]);
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const landmark = useMemo(
+    () => buildingMap.find((building) => building.id === selectedBuildingIds[0]),
+    [selectedBuildingIds]
+  )!;
 
-  const buildings = useMemo(() => {
+  /**
+   * Set of buildings that are not the landmark
+   * ! This is a fairly expensive operation, so we memoize it.
+   * ! Also we know for a fact that during landmark mode, the buildingMap will not change.
+   * ! We read the meshes including the landmark, but we filter out the landmark in other operations,
+   * ! since its cheap to do it there.
+   */
+  const buildingMeshes = useMemo(() => {
     const output: Object3D[] = [];
     buildingsRef.current?.traverse((child) => {
       if (child.uuid.startsWith('building') && child.uuid !== landmark?.id) {
@@ -26,25 +41,51 @@ function LandmarkRayCaster({ buildingsRef }: LandmarkRayCasterProps): JSX.Elemen
       }
     });
     return output;
-  }, [buildingMap, buildingsRef.current, landmark]);
+  }, [landmark]);
 
+  /**
+   * Direction of the rays
+   */
+  const directions = useMemo(
+    () =>
+      buildingMeshes.map((mesh) => {
+        const direction = new Vector3(mesh.position.x, height, mesh.position.z)
+          .sub(new Vector3(landmark?.x ?? 0, height, landmark?.z ?? 0))
+          .normalize();
+        return direction;
+      }),
+    [buildingMeshes, landmark, height]
+  );
+
+  /**
+   * Move a single raycaster around to find the closest building
+   */
   useEffect(() => {
-    if (raycasterRef.current != null && landmark != null) {
-      buildingMap
-        .filter((building) => building.id !== landmark.id)
-        .forEach((building) => {
-          raycasterRef.current?.ray.origin.set(landmark.x, 0, landmark.z);
-          raycasterRef.current?.ray.direction.set(building.x, 0, building.z).normalize();
-          const intersects = raycasterRef.current?.intersectObjects(buildings);
+    if (raycasterRef.current != null) {
+      directions.forEach((direction) => {
+        raycasterRef.current.ray.origin.set(landmark?.x ?? 0, height, landmark?.z ?? 0);
+        raycasterRef.current.ray.direction.set(direction.x, direction.y, direction.z);
 
-          if (intersects?.length !== undefined && intersects.length > 0) {
-            // console.log('intersects', intersects);
-          }
-        });
+        const intersects = raycasterRef.current.intersectObjects(buildingMeshes);
+
+        if (intersects?.length !== undefined && intersects.length > 0) {
+          // console.log('intersects', intersects);
+        }
+      });
     }
-  }, [landmark, buildings]);
+  }, [landmark, directions, buildingMeshes]);
 
-  return <raycaster ref={raycasterRef}></raycaster>;
+  return (
+    <>
+      <raycaster ref={raycasterRef}></raycaster>
+      {debug &&
+        landmark != null &&
+        directions.map((direction, idx) => {
+          const origin = new Vector3(landmark.x, height, landmark.z);
+          return <arrowHelper key={idx} args={[direction, origin, 20, 0xffff00, 0.5, 0.5]} />;
+        })}
+    </>
+  );
 }
 
 export default LandmarkRayCaster;
