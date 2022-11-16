@@ -1,5 +1,6 @@
 import { Select } from '@react-three/drei';
-import React from 'react';
+import React, { forwardRef } from 'react';
+import { Group } from 'three';
 import useStore from '../../store';
 import BuildingA from './components/BuildingA';
 import BuildingB from './components/BuildingB';
@@ -8,16 +9,20 @@ interface BuildingsProps {
   baseHeight: number;
 }
 
-function Buildings({ baseHeight }: BuildingsProps): JSX.Element | null {
+function Buildings({ baseHeight }: BuildingsProps, ref: React.Ref<Group>): JSX.Element | null {
   const buildingMap = useStore((state) => state.buildingMap);
   const setSelectedBuildingIds = useStore((state) => state.setSelectedBuildingIds);
+  const editMode = useStore((state) => state.editMode);
 
   return (
-    <group position-y={baseHeight}>
+    <group ref={ref} position-y={baseHeight}>
       <Select
         box
-        multiple
-        onChange={(data) => setSelectedBuildingIds(data.map((item) => item.uuid))}>
+        multiple={editMode === 'buildings'}
+        onChange={(data) =>
+          (editMode === 'buildings' || editMode === 'landmark') &&
+          setSelectedBuildingIds(data.map((item) => item.uuid))
+        }>
         {buildingMap.map(({ type, id, x, z }) => {
           switch (type) {
             case 'apartment':
@@ -33,4 +38,4 @@ function Buildings({ baseHeight }: BuildingsProps): JSX.Element | null {
   );
 }
 
-export default Buildings;
+export default forwardRef(Buildings);

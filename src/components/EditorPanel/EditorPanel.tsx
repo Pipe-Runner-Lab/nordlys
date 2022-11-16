@@ -4,6 +4,7 @@ import useStore from '../../store';
 import { HiOutlineMenu as OpenIcon } from 'react-icons/hi';
 import PrimaryHeader from './components/PrimaryHeader';
 import BuildingPanel from '../BuildingPanel';
+import LandmarkPanel from '../LandmarkPanel';
 
 const menuVariants = {
   open: {
@@ -17,6 +18,7 @@ const menuVariants = {
 function EditorPanel(): JSX.Element {
   const isMenuOpen = useStore((state) => state.isMenuOpen);
   const setIsMenuOpen = useStore((state) => state.setIsMenuOpen);
+  const editMode = useStore((state) => state.editMode);
 
   return (
     <motion.div
@@ -46,9 +48,17 @@ function EditorPanel(): JSX.Element {
 
       <div className="h-[1px] w-auto mx-2 bg-gray-300" />
 
-      <div>
-        <BuildingPanel />
-      </div>
+      {editMode === 'buildings' && (
+        <div>
+          <BuildingPanel />
+        </div>
+      )}
+
+      {editMode === 'landmark' && (
+        <div>
+          <LandmarkPanel />
+        </div>
+      )}
     </motion.div>
   );
 }

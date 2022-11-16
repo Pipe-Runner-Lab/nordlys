@@ -21,6 +21,7 @@ function BuildingPanel(): JSX.Element {
   useEffect(() => {
     return () => {
       setBuildingEditorMode(undefined);
+      clearSelectedBuildingIds();
     };
   }, []);
 

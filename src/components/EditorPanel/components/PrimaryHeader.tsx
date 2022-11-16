@@ -13,11 +13,13 @@ import useStore from '../../../store';
 function PrimaryHeader(): JSX.Element {
   const editMode = useStore((state) => state.editMode);
   const setIsMenuOpen = useStore((state) => state.setIsMenuOpen);
+  const setEditMode = useStore((state) => state.setEditMode);
 
   return (
     <div className="flex justify-between w-full">
       <div className="flex space-x-2">
         <button
+          onClick={() => setEditMode('buildings')}
           className={cx(
             'flex items-center justify-center w-10 h-10  rounded-full outline -outline-offset-1 outline-1',
             editMode === 'buildings' ? 'outline-sky-400 bg-sky-100' : 'outline-gray-300'
@@ -28,6 +30,7 @@ function PrimaryHeader(): JSX.Element {
           />
         </button>
         <button
+          onClick={() => setEditMode('shadow')}
           className={cx(
             'flex items-center justify-center w-10 h-10  rounded-full outline -outline-offset-1 outline-1',
             editMode === 'shadow' ? 'outline-sky-400 bg-sky-100' : 'outline-gray-300'
@@ -38,6 +41,7 @@ function PrimaryHeader(): JSX.Element {
           />
         </button>
         <button
+          onClick={() => setEditMode('landmark')}
           className={cx(
             'flex items-center justify-center w-10 h-10  rounded-full outline -outline-offset-1 outline-1',
             editMode === 'landmark' ? 'outline-sky-400 bg-sky-100' : 'outline-gray-300'
@@ -48,6 +52,7 @@ function PrimaryHeader(): JSX.Element {
           />
         </button>
         <button
+          onClick={() => setEditMode('sky-exposure')}
           className={cx(
             'flex items-center justify-center w-10 h-10  rounded-full outline -outline-offset-1 outline-1',
             editMode === 'sky-exposure' ? 'outline-sky-400 bg-sky-100' : 'outline-gray-300'

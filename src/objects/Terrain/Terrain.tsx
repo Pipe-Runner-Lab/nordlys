@@ -50,7 +50,12 @@ function Terrain({ height }: TerrainProps, ref: React.Ref<Group>): JSX.Element {
       } = event;
       editorMarkRef.current?.position.setX(x);
       editorMarkRef.current?.position.setZ(z);
-      addBuilding({ x, z, type: editorMarkType, id: `${x}-${z}-${editorMarkType}` });
+      addBuilding({
+        x,
+        z,
+        type: editorMarkType,
+        id: `building-${x}-${z}-${editorMarkType}`
+      });
     },
     [editorMarkType]
   );

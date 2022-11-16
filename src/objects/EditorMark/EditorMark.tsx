@@ -1,8 +1,8 @@
 import React, { forwardRef, useCallback } from 'react';
 import { Group } from 'three';
 import useStore from '../../store';
-import BuildingA from '../buildings/components/BuildingA';
-import BuildingB from '../buildings/components/BuildingB';
+import BuildingA from '../Buildings/components/BuildingA';
+import BuildingB from '../Buildings/components/BuildingB';
 
 interface EditorMarkProps {
   baseHeight: number;
