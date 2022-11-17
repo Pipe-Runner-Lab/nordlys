@@ -2,7 +2,7 @@ import { Select } from '@react-three/drei';
 import React, { forwardRef } from 'react';
 import { Group } from 'three';
 import useStore from '../../store';
-import BuildingA from './components/BuildingA';
+import Apartment from './components/Apartment';
 import BuildingB from './components/BuildingB';
 
 interface BuildingsProps {
@@ -34,7 +34,7 @@ function Buildings({ y }: BuildingsProps, ref: React.Ref<Group>): JSX.Element | 
         {buildingDataMap.map(({ type, id, x, z }) => {
           switch (type) {
             case 'apartment':
-              return <BuildingA id={id} key={id} x={x} z={z} />;
+              return <Apartment id={id} key={id} x={x} z={z} />;
             case 'office':
               return <BuildingB id={id} key={id} x={x} z={z} />;
             default:

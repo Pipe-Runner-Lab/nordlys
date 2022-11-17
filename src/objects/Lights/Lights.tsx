@@ -13,9 +13,9 @@ function Lights(): JSX.Element {
   const directionalLightRef = useRef<DirectionalLight>(null);
   const shadowCameraRef = useRef<OrthographicCamera>(null);
 
-  const { position, cameraFrustumRef, shouldShowHelper } = useControls('Sun', {
-    position: { value: [30, 30, 30] },
-    cameraFrustumRef: { value: 40, max: 50, min: 20 },
+  const { position, cameraFrustum, shouldShowHelper } = useControls('Sun', {
+    position: { value: [24, 24, 24] },
+    cameraFrustum: { value: 40, max: 50, min: 20 },
     shouldShowHelper: { value: false }
   });
 
@@ -27,6 +27,16 @@ function Lights(): JSX.Element {
     target.position.set(0, 0, 0);
     return target;
   }, []);
+
+  // TODO: Fix it, not working
+  // useEffect(() => {
+  //   if (shadowCameraRef.current != null) {
+  //     shadowCameraRef.current.top = cameraFrustum;
+  //     shadowCameraRef.current.left = cameraFrustum;
+  //     shadowCameraRef.current.bottom = -cameraFrustum;
+  //     shadowCameraRef.current.right = -cameraFrustum;
+  //   }
+  // }, [cameraFrustum]);
 
   return (
     <>
@@ -41,13 +51,13 @@ function Lights(): JSX.Element {
         shadow-mapSize-height={1024}
         shadow-mapSize-width={1024}>
         <orthographicCamera
-          top={cameraFrustumRef}
-          left={cameraFrustumRef}
-          bottom={-cameraFrustumRef}
-          right={-cameraFrustumRef}
+          top={cameraFrustum}
+          left={cameraFrustum}
+          bottom={-cameraFrustum}
+          right={-cameraFrustum}
           ref={shadowCameraRef}
           near={10}
-          far={100}
+          far={74}
           attach="shadow-camera"
         />
       </directionalLight>

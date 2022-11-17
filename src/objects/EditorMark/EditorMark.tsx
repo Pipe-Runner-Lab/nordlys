@@ -1,7 +1,7 @@
 import React, { forwardRef, useCallback } from 'react';
 import { Group } from 'three';
 import useStore from '../../store';
-import BuildingA from '../Buildings/components/BuildingA';
+import BuildingA from '../Buildings/components/Apartment';
 import BuildingB from '../Buildings/components/BuildingB';
 
 interface EditorMarkProps {
