@@ -6,7 +6,9 @@ function App(): JSX.Element {
   return (
     <div className="w-full h-screen">
       <Home />
-      <Leva />
+      <div className="absolute top-2 left-2">
+        <Leva collapsed fill />
+      </div>
     </div>
   );
 }

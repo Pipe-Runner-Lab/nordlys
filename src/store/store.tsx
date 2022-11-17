@@ -1,20 +1,23 @@
 import create from 'zustand';
 
-export type BuildingType = 'apartment' | 'office';
-
+// Editor state
 type EditModes = 'buildings' | 'landmark' | 'sky-exposure' | 'shadow';
 type BuildingEditorMode = 'insert' | undefined;
 
-interface Building {
-  id: string;
+// Building Data
+export type BuildingType = 'apartment' | 'office';
+export interface BuildingData {
+  id: string; // * id is being mapped to name since this is a uuid string
+  // * and threeJS only supports integer ids
   x: number;
+  y: number;
   z: number;
   type: BuildingType;
 }
 
 interface Store {
-  buildingMap: Building[];
-  addBuilding: (args: Building) => void;
+  buildingDataMap: BuildingData[];
+  insertBuilding: (args: BuildingData) => void;
   removeBuilding: (id: string) => void;
   editMode: EditModes;
   setEditMode: (mode: EditModes) => void;
@@ -24,16 +27,22 @@ interface Store {
   setIsMenuOpen: (isOpen: boolean) => void;
   buildingEditorMode: BuildingEditorMode;
   setBuildingEditorMode: (mode: BuildingEditorMode) => void;
-  selectedBuildingIds: string[];
-  setSelectedBuildingIds: (ids: string[]) => void;
-  clearSelectedBuildingIds: () => void;
+  selected: string[];
+  setSelected: (ids: string[]) => void;
+  clearSelected: () => void;
+  blocked: string[];
+  setBlocked: (ids: string[]) => void;
+  clearBlocked: () => void;
 }
 
 const useStore = create<Store>((set) => ({
-  buildingMap: [],
-  addBuilding: (building) => set((state) => ({ buildingMap: [...state.buildingMap, building] })),
+  buildingDataMap: [],
+  insertBuilding: (building) =>
+    set((state) => ({ buildingDataMap: [...state.buildingDataMap, building] })),
   removeBuilding: (id) =>
-    set((state) => ({ buildingMap: state.buildingMap.filter((building) => building.id !== id) })),
+    set((state) => ({
+      buildingDataMap: state.buildingDataMap.filter((building) => building.id !== id)
+    })),
   editMode: 'buildings',
   setEditMode: (mode) => set({ editMode: mode }),
   editorMarkType: 'apartment',
@@ -43,12 +52,15 @@ const useStore = create<Store>((set) => ({
   setIsMenuOpen: (isOpen) =>
     isOpen
       ? set({ isMenuOpen: isOpen })
-      : set({ isMenuOpen: isOpen, selectedBuildingIds: [], buildingEditorMode: undefined }),
+      : set({ isMenuOpen: isOpen, selected: [], blocked: [], buildingEditorMode: undefined }),
   buildingEditorMode: undefined,
   setBuildingEditorMode: (mode) => set({ buildingEditorMode: mode }),
-  selectedBuildingIds: [],
-  setSelectedBuildingIds: (ids) => set({ selectedBuildingIds: ids }),
-  clearSelectedBuildingIds: () => set({ selectedBuildingIds: [] })
+  selected: [],
+  setSelected: (ids) => set({ selected: ids }),
+  clearSelected: () => set({ selected: [] }),
+  blocked: [],
+  setBlocked: (ids) => set({ blocked: ids }),
+  clearBlocked: () => set({ blocked: [] })
 }));
 
 export default useStore;

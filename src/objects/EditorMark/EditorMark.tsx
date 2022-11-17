@@ -5,10 +5,10 @@ import BuildingA from '../Buildings/components/BuildingA';
 import BuildingB from '../Buildings/components/BuildingB';
 
 interface EditorMarkProps {
-  baseHeight: number;
+  y: number;
 }
 
-function EditorMark({ baseHeight }: EditorMarkProps, ref?: React.Ref<Group>): JSX.Element {
+function EditorMark({ y }: EditorMarkProps, ref?: React.Ref<Group>): JSX.Element {
   const editorMarkType = useStore((state) => state.editorMarkType);
 
   const MarkComponent = useCallback((): JSX.Element | null => {
@@ -23,7 +23,7 @@ function EditorMark({ baseHeight }: EditorMarkProps, ref?: React.Ref<Group>): JS
   }, [editorMarkType]);
 
   return (
-    <group visible={false} ref={ref} position={[0, baseHeight, 0]}>
+    <group visible={false} ref={ref} position={[0, y, 0]}>
       <MarkComponent />
     </group>
   );

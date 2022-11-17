@@ -1,29 +1,28 @@
 import { ThreeEvent } from '@react-three/fiber';
 import { useControls } from 'leva';
-import React, { forwardRef, useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { Group } from 'three';
 import useStore from '../../store';
 import EditorMark from '../EditorMark';
+import { v4 as uuidv4 } from 'uuid';
 
 interface TerrainProps {
-  height: number;
+  y: number;
 }
 
-function Terrain({ height }: TerrainProps, ref: React.Ref<Group>): JSX.Element {
-  const editMode = useStore((state) => state.editMode);
-  const buildingEditorMode = useStore((state) => state.buildingEditorMode);
-  const isMenuOpen = useStore((state) => state.isMenuOpen);
-  const addBuilding = useStore((state) => state.addBuilding);
-  const editorMarkType = useStore((state) => state.editorMarkType);
+function Terrain({ y }: TerrainProps): JSX.Element {
+  const { roughness } = useControls('Terrain', { roughness: { value: 1, min: 0, max: 1 } });
 
   const editorMarkRef = useRef<Group>(null);
 
-  const { roughness } = useControls('Terrain', { roughness: { value: 1, min: 0, max: 1 } });
+  const editMode = useStore((state) => state.editMode);
+  const buildingEditorMode = useStore((state) => state.buildingEditorMode);
+  const isMenuOpen = useStore((state) => state.isMenuOpen);
+  const insertBuilding = useStore((state) => state.insertBuilding);
+  const editorMarkType = useStore((state) => state.editorMarkType);
 
-  // TODO: Need a ref based re-render
   const isInsertModeActive =
     isMenuOpen && buildingEditorMode === 'insert' && editMode === 'buildings';
-  //  && editorMarkRef.current != null;
 
   useEffect(() => {
     if (editorMarkRef.current != null) {
@@ -31,31 +30,27 @@ function Terrain({ height }: TerrainProps, ref: React.Ref<Group>): JSX.Element {
     }
   }, [isInsertModeActive]);
 
-  const handlePointerMove = useCallback((event: ThreeEvent<PointerEvent>) => {
+  const handlePointerMove = useCallback(({ point: { x, z } }: ThreeEvent<PointerEvent>) => {
     if (editorMarkRef.current != null) {
       editorMarkRef.current.visible = true;
+      editorMarkRef.current.position.setX(x);
+      editorMarkRef.current.position.setZ(z);
     }
-
-    const {
-      point: { x, z }
-    } = event;
-    editorMarkRef.current?.position.setX(x);
-    editorMarkRef.current?.position.setZ(z);
   }, []);
 
   const handleClick = useCallback(
-    (event: ThreeEvent<MouseEvent>) => {
-      const {
-        point: { x, z }
-      } = event;
-      editorMarkRef.current?.position.setX(x);
-      editorMarkRef.current?.position.setZ(z);
-      addBuilding({
-        x,
-        z,
-        type: editorMarkType,
-        id: `building-${x}-${z}-${editorMarkType}`
-      });
+    ({ point: { x, z } }: ThreeEvent<MouseEvent>) => {
+      if (editorMarkRef.current != null) {
+        editorMarkRef.current?.position.setX(x);
+        editorMarkRef.current?.position.setZ(z);
+        insertBuilding({
+          x,
+          y: 0, // this will be adjusted based on terrain y
+          z,
+          type: editorMarkType,
+          id: uuidv4()
+        });
+      }
     },
     [editorMarkType]
   );
@@ -67,23 +62,21 @@ function Terrain({ height }: TerrainProps, ref: React.Ref<Group>): JSX.Element {
   }, []);
 
   return (
-    <>
-      <group ref={ref}>
-        <mesh
-          receiveShadow
-          onPointerMove={isInsertModeActive ? handlePointerMove : undefined}
-          onClick={isInsertModeActive ? handleClick : undefined}
-          onPointerOut={isInsertModeActive ? handlePointerOut : undefined}
-          position={[0, height, 0]}
-          rotation={[-Math.PI / 2, 0, 0]}>
-          <planeBufferGeometry args={[50, 50]} />
-          <meshStandardMaterial color="#474E68" roughness={roughness} />
-        </mesh>
-      </group>
+    <group>
+      <mesh
+        receiveShadow
+        onPointerMove={isInsertModeActive ? handlePointerMove : undefined}
+        onClick={isInsertModeActive ? handleClick : undefined}
+        onPointerOut={isInsertModeActive ? handlePointerOut : undefined}
+        position={[0, y, 0]}
+        rotation={[-Math.PI / 2, 0, 0]}>
+        <planeBufferGeometry args={[50, 50]} />
+        <meshStandardMaterial color="#474E68" roughness={roughness} />
+      </mesh>
 
-      <EditorMark baseHeight={height} ref={editorMarkRef} />
-    </>
+      <EditorMark y={y} ref={editorMarkRef} />
+    </group>
   );
 }
 
-export default forwardRef(Terrain);
+export default Terrain;

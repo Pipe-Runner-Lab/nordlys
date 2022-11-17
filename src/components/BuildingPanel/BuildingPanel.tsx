@@ -13,26 +13,26 @@ function BuildingPanel(): JSX.Element {
   const buildingEditorMode = useStore((state) => state.buildingEditorMode);
   const removeBuilding = useStore((state) => state.removeBuilding);
   const setBuildingEditorMode = useStore((state) => state.setBuildingEditorMode);
-  const selectedBuildingIds = useStore((state) => state.selectedBuildingIds);
-  const clearSelectedBuildingIds = useStore((state) => state.clearSelectedBuildingIds);
+  const selected = useStore((state) => state.selected);
+  const clearSelected = useStore((state) => state.clearSelected);
   const setEditorMarkType = useStore((state) => state.setEditorMarkType);
   const editorMarkType = useStore((state) => state.editorMarkType);
 
   useEffect(() => {
     return () => {
       setBuildingEditorMode(undefined);
-      clearSelectedBuildingIds();
+      clearSelected();
     };
   }, []);
 
   const deleteAll = (): void => {
-    selectedBuildingIds.forEach((id) => {
+    selected.forEach((id) => {
       removeBuilding(id);
     });
-    clearSelectedBuildingIds();
+    clearSelected();
   };
 
-  const isDeleteActive = selectedBuildingIds.length > 0;
+  const isDeleteActive = selected.length > 0;
 
   return (
     <div className="p-2 space-y-2">

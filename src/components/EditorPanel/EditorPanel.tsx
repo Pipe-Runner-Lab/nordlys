@@ -28,6 +28,7 @@ function EditorPanel(): JSX.Element {
         duration: 0.3,
         type: 'tween'
       }}
+      initial="closed"
       className="absolute w-1/4 max-w-md bg-white rounded-md shadow-md min-w-sm top-2 bottom-2 right-2 backdrop-blur-sm bg-opacity-90">
       <AnimatePresence>
         {!isMenuOpen && (
