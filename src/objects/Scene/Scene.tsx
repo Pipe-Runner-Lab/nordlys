@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { Suspense, useRef } from 'react';
 import Buildings from '../Buildings';
 import Terrain from '../Terrain';
 import Park from '../Park';
@@ -24,8 +24,9 @@ function Scene(): JSX.Element {
   return (
     <>
       <color attach="background" args={['#474E68']} />
-
-      <Buildings ref={buildingsRef} y={terrainY} />
+      <Suspense fallback={null}>
+        <Buildings ref={buildingsRef} y={terrainY} />
+      </Suspense>
       {/* <LightBar /> */}
       <Park />
       <Terrain y={terrainY} />

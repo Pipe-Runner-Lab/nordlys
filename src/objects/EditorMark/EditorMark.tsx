@@ -1,8 +1,14 @@
 import React, { forwardRef, useCallback } from 'react';
 import { Group } from 'three';
 import useStore from '../../store';
-import BuildingA from '../Buildings/components/Apartment';
-import BuildingB from '../Buildings/components/BuildingB';
+import Apartment from '../Buildings/components/Apartment';
+import Skyscraper from '../Buildings/components/Skyscraper';
+import Office from '../Buildings/components/Office';
+import Hotel from '../Buildings/components/Hotel';
+import Government from '../Buildings/components/Government';
+import Hospital from '../Buildings/components/Hospital';
+import House from '../Buildings/components/House';
+import Shop from '../Buildings/components/Shop';
 
 interface EditorMarkProps {
   y: number;
@@ -14,9 +20,21 @@ function EditorMark({ y }: EditorMarkProps, ref?: React.Ref<Group>): JSX.Element
   const MarkComponent = useCallback((): JSX.Element | null => {
     switch (editorMarkType) {
       case 'apartment':
-        return <BuildingA />;
+        return <Apartment />;
       case 'office':
-        return <BuildingB />;
+        return <Office />;
+      case 'skyscraper':
+        return <Skyscraper />;
+      case 'hotel':
+        return <Hotel />;
+      case 'government':
+        return <Government />;
+      case 'house':
+        return <House />;
+      case 'shop':
+        return <Shop />;
+      case 'hospital':
+        return <Hospital />;
       default:
         return null;
     }

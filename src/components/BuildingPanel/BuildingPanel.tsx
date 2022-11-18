@@ -7,7 +7,12 @@ import { BuildingType } from '../../store/store';
 const options: Array<{ value: BuildingType; label: string }> = [
   { value: 'apartment', label: 'Apartment' },
   { value: 'office', label: 'Office' },
-  { value: 'empirestate', label: 'Empirestate' }
+  { value: 'skyscraper', label: 'Skyscraper' },
+  { value: 'hotel', label: 'Hotel' },
+  { value: 'government', label: 'Government' },
+  { value: 'house', label: 'House' },
+  { value: 'shop', label: 'Shop' },
+  { value: 'hospital', label: 'Hospital' }
 ];
 
 function BuildingPanel(): JSX.Element {

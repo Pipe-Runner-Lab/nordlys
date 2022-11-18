@@ -3,7 +3,8 @@ import useStore from '../../../store';
 import { getColor } from '../utils/color';
 import { useGLTF, useTexture } from '@react-three/drei';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-interface ApartmentProps {
+
+interface HotelProps {
   x?: number;
   z?: number;
   uuid?: string;
@@ -11,7 +12,7 @@ interface ApartmentProps {
 
 type GLTFResult = GLTF & {
   nodes: {
-    ['3Story_Balcony']: THREE.Mesh;
+    ['4Story_Wide_2Doors_Roof']: THREE.Mesh;
   };
 
   materials: {
@@ -19,11 +20,11 @@ type GLTFResult = GLTF & {
   };
 };
 
-function Apartment({ x = 0, z = 0, uuid = 'A' }: ApartmentProps): JSX.Element {
+function Hotel({ x = 0, z = 0, uuid = 'HOT' }: HotelProps): JSX.Element {
   const height = 0;
 
   const { nodes, materials } = useGLTF(
-    process.env.PUBLIC_URL + '/assets/apartment/apartment.glb'
+    process.env.PUBLIC_URL + '/assets/hotel/hotel.glb'
   ) as unknown as GLTFResult;
 
   const selected = useStore((state) => state.selected);
@@ -33,16 +34,16 @@ function Apartment({ x = 0, z = 0, uuid = 'A' }: ApartmentProps): JSX.Element {
   const isBlocked = blocked.includes(uuid);
 
   const color = getColor(isSelected, isBlocked);
-  const texture = useTexture(process.env.PUBLIC_URL + '/assets/apartment/Texture_Green.png');
+  const texture = useTexture(process.env.PUBLIC_URL + '/assets/hotel/Texture_Red.png');
 
   return (
-    <group>
+    <group dispose={null}>
       <mesh
         name={uuid}
         position={[x, height / 2, z]}
         castShadow
         receiveShadow
-        geometry={nodes['3Story_Balcony'].geometry}
+        geometry={nodes['4Story_Wide_2Doors_Roof'].geometry}
         material={materials.Texture}>
         <meshStandardMaterial map={texture} color={isSelected ? color : '#ffffff'} />
       </mesh>
@@ -50,4 +51,4 @@ function Apartment({ x = 0, z = 0, uuid = 'A' }: ApartmentProps): JSX.Element {
   );
 }
 
-export default Apartment;
+export default Hotel;
