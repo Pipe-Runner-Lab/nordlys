@@ -3,6 +3,7 @@ import React, { forwardRef } from 'react';
 import { Group } from 'three';
 import useStore from '../../store';
 import Apartment from './components/Apartment';
+import Empirestate from './components/Empirestate';
 import BuildingB from './components/BuildingB';
 
 interface BuildingsProps {
@@ -34,9 +35,11 @@ function Buildings({ y }: BuildingsProps, ref: React.Ref<Group>): JSX.Element | 
         {buildingDataMap.map(({ type, id, x, z }) => {
           switch (type) {
             case 'apartment':
-              return <Apartment id={id} key={id} x={x} z={z} />;
+              return <Apartment uuid={id} key={id} x={x} z={z} />;
             case 'office':
-              return <BuildingB id={id} key={id} x={x} z={z} />;
+              return <BuildingB uuid={id} key={id} x={x} z={z} />;
+            case 'empirestate':
+              return <Empirestate uuid={id} key={id} x={x} z={z} />;
             default:
               return null;
           }

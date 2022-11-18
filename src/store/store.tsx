@@ -5,7 +5,7 @@ type EditModes = 'buildings' | 'landmark' | 'sky-exposure' | 'shadow';
 type BuildingEditorMode = 'insert' | undefined;
 
 // Building Data
-export type BuildingType = 'apartment' | 'office';
+export type BuildingType = 'apartment' | 'office' | 'empirestate';
 export interface BuildingData {
   id: string; // * id is being mapped to name since this is a uuid string
   // * and threeJS only supports integer ids
@@ -16,6 +16,7 @@ export interface BuildingData {
 }
 
 interface Store {
+  [x: string]: any;
   buildingDataMap: BuildingData[];
   insertBuilding: (args: BuildingData) => void;
   removeBuilding: (id: string) => void;

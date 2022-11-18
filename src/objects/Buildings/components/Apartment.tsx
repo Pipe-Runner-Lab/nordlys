@@ -1,46 +1,41 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import useStore from '../../../store';
 import { getColor } from '../utils/color';
-import { useGLTF } from '@react-three/drei';
+import { useGLTF, useTexture } from '@react-three/drei';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { MeshStandardMaterial } from 'three';
 
 interface ApartmentProps {
   x?: number;
   z?: number;
-  id?: string;
+  uuid?: string;
 }
 
 type GLTFResult = GLTF & {
   nodes: {
-    Cube001: THREE.Mesh;
-    Cube001_1: THREE.Mesh;
-    Cube001_2: THREE.Mesh;
-    Cube001_3: THREE.Mesh;
+    ['4Story']: THREE.Mesh;
   };
+
   materials: {
-    Base: THREE.MeshStandardMaterial;
-    Door: THREE.MeshStandardMaterial;
-    Windows: THREE.MeshStandardMaterial;
-    Roof2: THREE.MeshStandardMaterial;
+    Texture: THREE.MeshStandardMaterial;
   };
 };
 
-function Apartment({ x = 0, z = 0, id = 'A' }: ApartmentProps): JSX.Element {
-  const height = 5.7;
+function Apartment({ x = 0, z = 0, uuid = 'A' }: ApartmentProps): JSX.Element {
+  const height = 0;
 
   const { nodes, materials } = useGLTF(
-    process.env.PUBLIC_URL + '/assets/skyscraper5.glb'
+    process.env.PUBLIC_URL + '/assets/apartment.glb'
   ) as unknown as GLTFResult;
 
   const selected = useStore((state) => state.selected);
   const blocked = useStore((state) => state.blocked);
 
-  const isSelected = selected.includes(id);
-  const isBlocked = blocked.includes(id);
+  const isSelected = selected.includes(uuid);
+  const isBlocked = blocked.includes(uuid);
 
   const color = getColor(isSelected, isBlocked);
-
+  const texture = useTexture(process.env.PUBLIC_URL + '/assets/apartexture.png');
   // return (
   //   <mesh name={id} position={[x, height / 2, z]} castShadow receiveShadow>
   //     <boxBufferGeometry args={[2, height, 2]} />
@@ -48,39 +43,23 @@ function Apartment({ x = 0, z = 0, id = 'A' }: ApartmentProps): JSX.Element {
   //   </mesh>
   // );
 
-  const material: MeshStandardMaterial | undefined = useMemo(
-    () => (color != null ? new MeshStandardMaterial({ color }) : undefined),
-    [color]
-  );
+  // const material: MeshStandardMaterial | undefined = useMemo(
+  //   () => (color != null ? new MeshStandardMaterial({ color: color }) : undefined),
+  //   [color]
+  // );
+  const material: MeshStandardMaterial | undefined = new MeshStandardMaterial({ color });
 
   return (
-    <mesh name={id} position={[x, height / 2, z]}>
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Cube001.geometry}
-        material={material ?? materials.Base}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Cube001_1.geometry}
-        material={material ?? materials.Door}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Cube001_2.geometry}
-        material={material ?? materials.Windows}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Cube001_3.geometry}
-        material={material ?? materials.Roof2}
-      />
+    <mesh
+      name={uuid}
+      position={[x, height / 2, z]}
+      castShadow
+      receiveShadow
+      geometry={nodes['4Story'].geometry}
+      material={isSelected ? material : materials.Texture}>
+      <meshStandardMaterial map={texture} />
     </mesh>
   );
 }
-
+useGLTF.preload(process.env.PUBLIC_URL + '/assets/apartment.glb');
 export default Apartment;
