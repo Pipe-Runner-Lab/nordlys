@@ -1,5 +1,4 @@
-import { Scatter } from '@ant-design/charts';
-import { Pie } from '@ant-design/plots';
+import { Pie, Scatter } from '@ant-design/plots';
 import React, { useEffect, useMemo } from 'react';
 import useStore from '../../store';
 import {

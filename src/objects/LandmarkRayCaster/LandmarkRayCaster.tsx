@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useMemo } from 'react';
 import useStore from '../../store/store';
 import { Raycaster, Group, Vector3 } from 'three';
+import { BuildingHeightMap } from '../../constants/heights';
 
 interface LandmarkRayCasterProps {
   buildingsRef: React.RefObject<Group>;
@@ -8,7 +9,6 @@ interface LandmarkRayCasterProps {
   debug: boolean;
 }
 
-const castHeight = 5;
 const numberOfRays = 50;
 const rayLength = 50 * Math.SQRT2;
 
@@ -22,6 +22,13 @@ function LandmarkRayCaster({
 
   const buildingDataMap = useStore((state) => state.buildingDataMap);
   const setBlocked = useStore((state) => state.setBlocked);
+  const clearBlocked = useStore((state) => state.clearBlocked);
+
+  useEffect(() => {
+    return () => {
+      clearBlocked();
+    };
+  });
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const landmarkData = useMemo(
@@ -29,6 +36,7 @@ function LandmarkRayCaster({
     () => buildingDataMap.find((building) => building.id === selected[0])!,
     [selected]
   )!;
+  const castHeight = BuildingHeightMap[landmarkData.type];
   const rayOrigin = useMemo(
     () => new Vector3(landmarkData.x, castHeight, landmarkData.z),
     [landmarkData]
