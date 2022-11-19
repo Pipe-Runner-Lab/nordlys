@@ -3,7 +3,8 @@ import useStore from '../../../store';
 import { getColor } from '../utils/color';
 import { useGLTF, useTexture } from '@react-three/drei';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-interface ApartmentProps {
+
+interface OfficeProps {
   x?: number;
   z?: number;
   id?: string;
@@ -12,7 +13,7 @@ interface ApartmentProps {
 
 type GLTFResult = GLTF & {
   nodes: {
-    ['3Story_Balcony']: THREE.Mesh;
+    ['2Story_Wide_2Doors']: THREE.Mesh;
   };
 
   materials: {
@@ -20,15 +21,10 @@ type GLTFResult = GLTF & {
   };
 };
 
-const modelPath = process.env.PUBLIC_URL + '/assets/apartment/apartment.glb';
-const texturePath = process.env.PUBLIC_URL + '/assets/apartment/Texture_Green.png';
+const modelPath = process.env.PUBLIC_URL + '/assets/office/office.glb';
+const texturePath = process.env.PUBLIC_URL + '/assets/office/Texture_Light2.png';
 
-function Apartment({
-  x = 0,
-  z = 0,
-  id = 'APARTMENT',
-  placementMode = false
-}: ApartmentProps): JSX.Element {
+function Office({ x = 0, z = 0, id = 'HOTEL', placementMode = false }: OfficeProps): JSX.Element {
   const height = 0;
 
   const { nodes } = useGLTF(modelPath) as unknown as GLTFResult;
@@ -49,7 +45,7 @@ function Apartment({
         position={[x, height / 2, z]}
         castShadow
         receiveShadow
-        geometry={nodes['3Story_Balcony'].geometry}>
+        geometry={nodes['2Story_Wide_2Doors'].geometry}>
         {color != null ? (
           <meshBasicMaterial transparent opacity={0.5} color={color} />
         ) : (
@@ -60,6 +56,6 @@ function Apartment({
   );
 }
 
-export default Apartment;
+export default Office;
 
 useGLTF.preload(modelPath);

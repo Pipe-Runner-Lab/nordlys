@@ -13,9 +13,24 @@ function Lights(): JSX.Element {
   const directionalLightRef = useRef<DirectionalLight>(null);
   const shadowCameraRef = useRef<OrthographicCamera>(null);
 
-  const { position, cameraFrustum, shouldShowHelper } = useControls('Sun', {
+  const {
+    position,
+    cameraFrustumTop,
+    cameraFrustumBottom,
+    cameraFrustumLeft,
+    cameraFrustumRight,
+    shouldShowHelper,
+    cameraNear,
+    cameraFar
+  } = useControls('Sun', {
     position: { value: [24, 24, 24] },
-    cameraFrustum: { value: 40, max: 50, min: 20 },
+    cameraFrustumTop: { value: 40 },
+    cameraFrustumBottom: { value: -40 },
+    cameraFrustumLeft: { value: 40 },
+    cameraFrustumRight: { value: -40 },
+    cameraNear: { value: 10 },
+    cameraFar: { value: 74 },
+    shadowBias: { value: -0.001, max: 0, min: -0.1 },
     shouldShowHelper: { value: false }
   });
 
@@ -28,16 +43,6 @@ function Lights(): JSX.Element {
     return target;
   }, []);
 
-  // TODO: Fix it, not working
-  // useEffect(() => {
-  //   if (shadowCameraRef.current != null) {
-  //     shadowCameraRef.current.top = cameraFrustum;
-  //     shadowCameraRef.current.left = cameraFrustum;
-  //     shadowCameraRef.current.bottom = -cameraFrustum;
-  //     shadowCameraRef.current.right = -cameraFrustum;
-  //   }
-  // }, [cameraFrustum]);
-
   return (
     <>
       <ambientLight intensity={0.1} />
@@ -48,16 +53,17 @@ function Lights(): JSX.Element {
         position={position}
         target={target}
         castShadow
+        shadow-bias={-0.004}
         shadow-mapSize-height={1024}
         shadow-mapSize-width={1024}>
         <orthographicCamera
-          top={cameraFrustum}
-          left={cameraFrustum}
-          bottom={-cameraFrustum}
-          right={-cameraFrustum}
+          top={cameraFrustumTop}
+          left={cameraFrustumLeft}
+          bottom={cameraFrustumBottom}
+          right={cameraFrustumRight}
           ref={shadowCameraRef}
-          near={10}
-          far={74}
+          near={cameraNear}
+          far={cameraFar}
           attach="shadow-camera"
         />
       </directionalLight>

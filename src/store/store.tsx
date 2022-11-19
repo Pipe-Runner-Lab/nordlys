@@ -5,7 +5,15 @@ type EditModes = 'buildings' | 'landmark' | 'sky-exposure' | 'shadow';
 type BuildingEditorMode = 'insert' | undefined;
 
 // Building Data
-export type BuildingType = 'apartment' | 'office';
+export type BuildingType =
+  | 'apartment'
+  | 'office'
+  | 'skyscraper'
+  | 'hotel'
+  | 'government'
+  | 'house'
+  | 'shop'
+  | 'hospital';
 export interface BuildingData {
   id: string; // * id is being mapped to name since this is a uuid string
   // * and threeJS only supports integer ids

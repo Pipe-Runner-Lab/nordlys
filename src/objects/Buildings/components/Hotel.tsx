@@ -3,7 +3,8 @@ import useStore from '../../../store';
 import { getColor } from '../utils/color';
 import { useGLTF, useTexture } from '@react-three/drei';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
-interface ApartmentProps {
+
+interface HotelProps {
   x?: number;
   z?: number;
   id?: string;
@@ -12,7 +13,7 @@ interface ApartmentProps {
 
 type GLTFResult = GLTF & {
   nodes: {
-    ['3Story_Balcony']: THREE.Mesh;
+    ['4Story_Wide_2Doors_Roof']: THREE.Mesh;
   };
 
   materials: {
@@ -20,19 +21,12 @@ type GLTFResult = GLTF & {
   };
 };
 
-const modelPath = process.env.PUBLIC_URL + '/assets/apartment/apartment.glb';
-const texturePath = process.env.PUBLIC_URL + '/assets/apartment/Texture_Green.png';
-
-function Apartment({
-  x = 0,
-  z = 0,
-  id = 'APARTMENT',
-  placementMode = false
-}: ApartmentProps): JSX.Element {
+function Hotel({ x = 0, z = 0, id = 'HOTEL', placementMode = false }: HotelProps): JSX.Element {
   const height = 0;
 
-  const { nodes } = useGLTF(modelPath) as unknown as GLTFResult;
-  const texture = useTexture(texturePath);
+  const { nodes } = useGLTF(
+    process.env.PUBLIC_URL + '/assets/hotel/hotel.glb'
+  ) as unknown as GLTFResult;
 
   const selected = useStore((state) => state.selected);
   const blocked = useStore((state) => state.blocked);
@@ -41,6 +35,7 @@ function Apartment({
   const isBlocked = blocked.includes(id);
 
   const color = getColor(isSelected, isBlocked, placementMode);
+  const texture = useTexture(process.env.PUBLIC_URL + '/assets/hotel/Texture_Red.png');
 
   return (
     <group dispose={null}>
@@ -49,7 +44,7 @@ function Apartment({
         position={[x, height / 2, z]}
         castShadow
         receiveShadow
-        geometry={nodes['3Story_Balcony'].geometry}>
+        geometry={nodes['4Story_Wide_2Doors_Roof'].geometry}>
         {color != null ? (
           <meshBasicMaterial transparent opacity={0.5} color={color} />
         ) : (
@@ -60,6 +55,4 @@ function Apartment({
   );
 }
 
-export default Apartment;
-
-useGLTF.preload(modelPath);
+export default Hotel;
