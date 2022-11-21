@@ -5,6 +5,7 @@ import { HiOutlineMenu as OpenIcon } from 'react-icons/hi';
 import PrimaryHeader from './components/PrimaryHeader';
 import BuildingPanel from '../BuildingPanel';
 import LandmarkPanel from '../LandmarkPanel';
+import ShadowPanel from '../ShadowPanel';
 
 const menuVariants = {
   open: {
@@ -58,6 +59,12 @@ function EditorPanel(): JSX.Element {
       {editMode === 'landmark' && (
         <div>
           <LandmarkPanel />
+        </div>
+      )}
+
+      {editMode === 'shadow' && (
+        <div>
+          <ShadowPanel />
         </div>
       )}
     </motion.div>

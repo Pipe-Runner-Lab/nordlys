@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useRef } from 'react';
 import Buildings from '../Buildings';
 import Terrain from '../Terrain';
@@ -5,7 +6,8 @@ import Park from '../Park';
 import { Group } from 'three';
 import { useControls } from 'leva';
 import LandmarkRayCaster from '../LandmarkRayCaster';
-import useStore from '../../store/store';
+import useStore from '../../store';
+import ShadowAnalyser from '../ShadowAnalyser';
 // import LightBar from '../LightBar';
 
 function Scene(): JSX.Element {
@@ -20,6 +22,7 @@ function Scene(): JSX.Element {
   const selected = useStore((state) => state.selected);
 
   const isLandmarkModeActive = editMode === 'landmark' && selected.length === 1;
+  const isShadowModeActive = editMode === 'shadow';
 
   return (
     <>
@@ -37,6 +40,8 @@ function Scene(): JSX.Element {
           buildingsRef={buildingsRef}
         />
       )}
+
+      {isShadowModeActive && <ShadowAnalyser />}
     </>
   );
 }

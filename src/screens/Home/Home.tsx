@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import { Canvas } from '@react-three/fiber';
 import Lights from '../../objects/Lights';

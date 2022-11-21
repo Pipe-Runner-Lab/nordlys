@@ -1,17 +1,24 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useHelper } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
 import { useControls } from 'leva';
-import React, { useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import {
   CameraHelper,
   DirectionalLight,
   DirectionalLightHelper,
   Object3D,
-  OrthographicCamera
+  OrthographicCamera,
+  Vector3
 } from 'three';
+import useStore from '../../store';
+
+const simulationTarget = new Vector3(-24, 24, -24);
 
 function Lights(): JSX.Element {
   const directionalLightRef = useRef<DirectionalLight>(null);
   const shadowCameraRef = useRef<OrthographicCamera>(null);
+  const accumulator = useRef<number>(0);
 
   const {
     position,
@@ -31,17 +38,42 @@ function Lights(): JSX.Element {
     cameraNear: { value: 10 },
     cameraFar: { value: 74 },
     shadowBias: { value: -0.001, max: 0, min: -0.1 },
-    shouldShowHelper: { value: false }
+    shouldShowHelper: { value: false, label: 'Debug' }
   });
 
   useHelper(shouldShowHelper && directionalLightRef, DirectionalLightHelper);
   useHelper(shouldShowHelper && shadowCameraRef, CameraHelper);
+
+  const simulationState = useStore((state) => state.simulationState);
+  const setSimulationState = useStore((state) => state.setSimulationState);
+  const setSimulationProgress = useStore((state) => state.setSimulationProgress);
+  const simulationProgress = useStore((state) => state.simulationProgress);
+
+  useEffect(() => {
+    if (simulationState === 'reset' && directionalLightRef.current != null) {
+      directionalLightRef.current.position.set(...position);
+      accumulator.current = 0;
+    }
+  }, [simulationState]);
 
   const target = useMemo(() => {
     const target = new Object3D();
     target.position.set(0, 0, 0);
     return target;
   }, []);
+
+  useFrame((state, delta) => {
+    if (simulationState === 'play' && directionalLightRef.current != null) {
+      const step = 0.001;
+      directionalLightRef.current.position.lerp(simulationTarget, step);
+      accumulator.current += step;
+
+      if (accumulator.current >= 4) {
+        setSimulationProgress(100);
+        setSimulationState('pause'); // call it at the end
+      }
+    }
+  });
 
   return (
     <>
