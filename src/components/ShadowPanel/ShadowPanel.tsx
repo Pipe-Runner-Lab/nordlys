@@ -6,13 +6,14 @@ function ShadowPanel(): JSX.Element {
   const simulationState = useStore((state) => state.simulationState);
   const setSimulationState = useStore((state) => state.setSimulationState);
   const simulationProgress = useStore((state) => state.simulationProgress);
+  const shadowMarkerPositions = useStore((state) => state.shadowMarkerPositions);
 
   useEffect(() => {
     setSimulationState('reset');
   }, []);
 
   return (
-    <div className="p-2 space-y-2">
+    <div className="flex flex-col flex-1 p-2 space-y-2">
       <div className="flex space-x-2">
         <button
           disabled={simulationProgress === 100}
@@ -34,10 +35,35 @@ function ShadowPanel(): JSX.Element {
         </button>
       </div>
       <div>
-        <div className="w-full bg-blue-300 rounded-full h-1.5 mb-4">
+        <div className="w-full bg-blue-300 rounded-full h-1.5 mt-1 mb-2">
           <div
             className="bg-blue-500 h-1.5 rounded-full"
             style={{ width: `${simulationProgress}%` }}></div>
+        </div>
+      </div>
+
+      <div className="flex flex-col flex-1 p-2 space-y-2 border border-gray-400 border-solid rounded-md">
+        <div className="flex items-center justify-center w-full py-1 rounded-sm bg-violet-300">
+          Intensity Markers
+        </div>
+        <div className="space-y-1 overflow-auto">
+          {shadowMarkerPositions.map(({ x, z, intensity }, index) => (
+            <div
+              key={index}
+              className="flex justify-between px-4 py-1 space-x-2 bg-indigo-200 rounded-sm">
+              <div className="flex space-x-8">
+                <div className="text-center">{Math.round(x)}</div>
+                <div className="text-center">{Math.round(z)}</div>
+              </div>
+              <div className="text-center">{intensity}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex flex-col flex-1 p-2 space-y-2 border border-gray-400 border-solid rounded-md">
+        <div className="flex items-center justify-center w-full py-1 rounded-sm bg-violet-300">
+          Shadow Map
         </div>
       </div>
     </div>

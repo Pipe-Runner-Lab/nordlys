@@ -18,7 +18,7 @@ function ShadowAnalyser(): JSX.Element {
     bottom: { value: 25, min: 0, max: 500 },
     near: { value: 0, min: -100, max: 100 },
     far: { value: 4, min: 0, max: 100 },
-    shouldShowHelper: { value: true, label: 'Debug' },
+    shouldShowHelper: { value: false, label: 'Debug' },
     screenshot: button((get) => {
       if (shadowCameraRef.current != null) {
         renderToJPG(gl, scene, shadowCameraRef.current);

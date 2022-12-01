@@ -3,6 +3,12 @@ import create from 'zustand';
 // Editor state
 type EditModes = 'buildings' | 'landmark' | 'sky-exposure' | 'shadow';
 type BuildingEditorMode = 'insert' | undefined;
+interface ShadowMarkerPosition {
+  id: string;
+  x: number;
+  z: number;
+  intensity: number;
+}
 
 // Building Data
 export type BuildingType =
@@ -48,6 +54,10 @@ interface Store {
   setSimulationState: (movement: simulationState) => void;
   simulationProgress: number;
   setSimulationProgress: (progress: number) => void;
+  shadowMarkerPositions: ShadowMarkerPosition[];
+  addShadowMarkerPosition: (position: ShadowMarkerPosition) => void;
+  removeShadowMarkerPosition: (id: string) => void;
+  clearShadowMarkerPositions: () => void;
 }
 
 const useStore = create<Store>((set) => ({
@@ -90,7 +100,15 @@ const useStore = create<Store>((set) => ({
       simulationProgress: movement === 'reset' ? 0 : state.simulationProgress
     })),
   simulationProgress: 0,
-  setSimulationProgress: (progress) => set({ simulationProgress: progress })
+  setSimulationProgress: (progress) => set({ simulationProgress: progress }),
+  shadowMarkerPositions: [],
+  addShadowMarkerPosition: (position) =>
+    set((state) => ({ shadowMarkerPositions: [...state.shadowMarkerPositions, position] })),
+  removeShadowMarkerPosition: (id) =>
+    set((state) => ({
+      shadowMarkerPositions: state.shadowMarkerPositions.filter((position) => position.id !== id)
+    })),
+  clearShadowMarkerPositions: () => set({ shadowMarkerPositions: [] })
 }));
 
 export default useStore;

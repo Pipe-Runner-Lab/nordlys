@@ -8,7 +8,6 @@ import { useControls } from 'leva';
 import LandmarkRayCaster from '../LandmarkRayCaster';
 import useStore from '../../store';
 import ShadowAnalyser from '../ShadowAnalyser';
-// import LightBar from '../LightBar';
 
 function Scene(): JSX.Element {
   const { terrainY } = useControls('Terrain', {
@@ -29,7 +28,6 @@ function Scene(): JSX.Element {
       <color attach="background" args={['#474E68']} />
 
       <Buildings ref={buildingsRef} y={terrainY} />
-      {/* <LightBar /> */}
       <Park />
       <Terrain y={terrainY} />
 
