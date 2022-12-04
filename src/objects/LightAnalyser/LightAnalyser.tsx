@@ -3,17 +3,22 @@ import { OrthographicCamera, useHelper } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import { button, useControls } from 'leva';
 import React, { useEffect, useRef } from 'react';
-import { CameraHelper } from 'three';
-import { OrthographicCamera as OrthographicCameraType, PerspectiveCamera } from 'three/src/Three';
+import {
+  CameraHelper,
+  OrthographicCamera as OrthographicCameraType,
+  PerspectiveCamera,
+  Vector3
+} from 'three';
 import useStore from '../../store/store';
 import { getIntensity } from './utils/intensityCalculator';
 import { renderToJPG } from './utils/screenshot';
 
-interface ShadowAnalyserProps {
+interface LightAnalyserProps {
   defaultCameraRef: React.RefObject<PerspectiveCamera | null>;
+  y: number;
 }
 
-function ShadowAnalyser({ defaultCameraRef }: ShadowAnalyserProps): JSX.Element {
+function ShadowAnalyser({ defaultCameraRef, y }: LightAnalyserProps): JSX.Element {
   const { gl, scene, camera } = useThree();
   const shadowCameraRef = useRef<OrthographicCameraType>(null);
   const offscreenCanvasRef = useRef<HTMLCanvasElement>(document.createElement('canvas'));
@@ -21,7 +26,7 @@ function ShadowAnalyser({ defaultCameraRef }: ShadowAnalyserProps): JSX.Element 
   const updateShadowMarkers = useStore((state) => state.updateShadowMarkers);
   const frameDeltaSum = useRef<number>(0);
 
-  const { left, right, top, bottom, near, far, shouldShowHelper } = useControls('Shadow Analyser', {
+  const { left, right, top, bottom, near, far, shouldShowHelper } = useControls('Light Analyser', {
     left: { value: 25, min: 0, max: 500 },
     right: { value: 25, min: 0, max: 500 },
     top: { value: 25, min: 0, max: 500 },
@@ -64,24 +69,43 @@ function ShadowAnalyser({ defaultCameraRef }: ShadowAnalyserProps): JSX.Element 
 
         frameDeltaSum.current = 0;
       }
-    }, 500);
+    }, 250);
     return () => clearInterval(interval);
   }, [shadowMarkerPositions]);
 
   return (
-    <group>
-      <OrthographicCamera
-        position={[0, 0.1, 0]}
-        near={near}
-        far={far}
-        left={-left}
-        right={right}
-        top={top}
-        bottom={-bottom}
-        zoom={1}
-        ref={shadowCameraRef}
-      />
-    </group>
+    <>
+      <group>
+        <OrthographicCamera
+          position={[0, 0.1, 0]}
+          near={near}
+          far={far}
+          left={-left}
+          right={right}
+          top={top}
+          bottom={-bottom}
+          zoom={1}
+          ref={shadowCameraRef}
+        />
+      </group>
+
+      {shadowMarkerPositions.map((marker) => {
+        const color = marker.intensity > 0.5 ? 'green' : 'red';
+        return (
+          <arrowHelper
+            key={marker.id}
+            args={[
+              new Vector3(0, 2, 0),
+              new Vector3(marker.x, y, marker.z),
+              50 * marker.intensity,
+              color,
+              0,
+              0
+            ]}
+          />
+        );
+      })}
+    </>
   );
 }
 

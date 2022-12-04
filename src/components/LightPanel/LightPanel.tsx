@@ -2,17 +2,17 @@ import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import useStore from '../../store';
 
-function ShadowPanel(): JSX.Element {
+function LightPanel(): JSX.Element {
   const simulationState = useStore((state) => state.simulationState);
   const setSimulationState = useStore((state) => state.setSimulationState);
   const simulationProgress = useStore((state) => state.simulationProgress);
-  const setShadowMode = useStore((state) => state.setShadowMode);
-  const shadowMode = useStore((state) => state.shadowMode);
+  const setLightMarkerMode = useStore((state) => state.setLightMarkerMode);
+  const lightMarkerMode = useStore((state) => state.lightMarkerMode);
   const shadowMarkers = useStore((state) => state.shadowMarkers);
 
   useEffect(() => {
     return () => {
-      setShadowMode(undefined);
+      setLightMarkerMode(undefined);
     };
   }, []);
 
@@ -57,13 +57,15 @@ function ShadowPanel(): JSX.Element {
           </div>
           <button
             onClick={() =>
-              shadowMode === undefined ? setShadowMode('insert') : setShadowMode(undefined)
+              lightMarkerMode === undefined
+                ? setLightMarkerMode('insert')
+                : setLightMarkerMode(undefined)
             }
             className={clsx('flex items-center justify-center py-1 rounded-sm w-28', {
-              'bg-green-300 shadow-lg': shadowMode === 'insert',
-              'bg-gray-300 shadow-lg': shadowMode === undefined
+              'bg-green-300 shadow-lg': lightMarkerMode === 'insert',
+              'bg-gray-300 shadow-lg': lightMarkerMode === undefined
             })}>
-            {shadowMode === undefined ? 'Start Adding' : 'Stop Adding'}
+            {lightMarkerMode === undefined ? 'Start Adding' : 'Stop Adding'}
           </button>
         </div>
         <div className="space-y-1 overflow-auto">
@@ -83,11 +85,11 @@ function ShadowPanel(): JSX.Element {
 
       <div className="flex flex-col flex-1 p-2 space-y-2 border border-gray-400 border-solid rounded-md">
         <div className="flex items-center justify-center w-full py-1 rounded-sm bg-violet-300">
-          Shadow Map
+          Light graph
         </div>
       </div>
     </div>
   );
 }
 
-export default ShadowPanel;
+export default LightPanel;

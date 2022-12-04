@@ -30,14 +30,14 @@ function PrimaryHeader(): JSX.Element {
           />
         </button>
         <button
-          onClick={() => setEditMode('shadow')}
+          onClick={() => setEditMode('light')}
           className={cx(
             'flex items-center justify-center w-10 h-10  rounded-full outline -outline-offset-1 outline-1',
-            editMode === 'shadow' ? 'outline-sky-400 bg-sky-100' : 'outline-gray-300'
+            editMode === 'light' ? 'outline-sky-400 bg-sky-100' : 'outline-gray-300'
           )}>
           <ShadowIcon
             size={18}
-            className={cx(editMode === 'shadow' ? 'fill-sky-500' : 'fill-gray-400')}
+            className={cx(editMode === 'light' ? 'fill-sky-500' : 'fill-gray-400')}
           />
         </button>
         <button

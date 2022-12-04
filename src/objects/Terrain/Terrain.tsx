@@ -18,7 +18,7 @@ function Terrain({ y }: TerrainProps): JSX.Element {
 
   const editMode = useStore((state) => state.editMode);
   const buildingEditorMode = useStore((state) => state.buildingEditorMode);
-  const shadowMode = useStore((state) => state.shadowMode);
+  const lightMarkerMode = useStore((state) => state.lightMarkerMode);
   const isMenuOpen = useStore((state) => state.isMenuOpen);
   const insertBuilding = useStore((state) => state.insertBuilding);
   const editorMarkType = useStore((state) => state.editorMarkType);
@@ -26,7 +26,7 @@ function Terrain({ y }: TerrainProps): JSX.Element {
 
   const isInsertModeActive =
     isMenuOpen && buildingEditorMode === 'insert' && editMode === 'buildings';
-  const isShadowModeActive = isMenuOpen && shadowMode === 'insert' && editMode === 'shadow';
+  const isShadowModeActive = isMenuOpen && lightMarkerMode === 'insert' && editMode === 'light';
 
   useEffect(() => {
     if (editorMarkRef.current != null) {

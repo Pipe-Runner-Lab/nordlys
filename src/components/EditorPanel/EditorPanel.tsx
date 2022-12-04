@@ -5,7 +5,7 @@ import { HiOutlineMenu as OpenIcon } from 'react-icons/hi';
 import PrimaryHeader from './components/PrimaryHeader';
 import BuildingPanel from '../BuildingPanel';
 import LandmarkPanel from '../LandmarkPanel';
-import ShadowPanel from '../ShadowPanel';
+import ShadowPanel from '../LightPanel';
 
 const menuVariants = {
   open: {
@@ -53,7 +53,7 @@ function EditorPanel(): JSX.Element {
       <div className="flex flex-col flex-1">
         {editMode === 'buildings' && <BuildingPanel />}
         {editMode === 'landmark' && <LandmarkPanel />}
-        {editMode === 'shadow' && <ShadowPanel />}
+        {editMode === 'light' && <ShadowPanel />}
       </div>
     </motion.div>
   );

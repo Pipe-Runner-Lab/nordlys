@@ -1,9 +1,9 @@
 import create from 'zustand';
 
 // Editor state
-type EditModes = 'buildings' | 'landmark' | 'sky-exposure' | 'shadow';
+type EditModes = 'buildings' | 'landmark' | 'sky-exposure' | 'light';
 type BuildingEditorMode = 'insert' | undefined;
-type ShadowMode = 'insert' | undefined;
+type LightMarkerMode = 'insert' | undefined;
 export interface ShadowMarker {
   id: string;
   x: number;
@@ -56,8 +56,8 @@ interface Store {
   simulationProgress: number;
   setSimulationProgress: (progress: number) => void;
   shadowMarkers: ShadowMarker[];
-  shadowMode: ShadowMode;
-  setShadowMode: (mode: ShadowMode) => void;
+  lightMarkerMode: LightMarkerMode;
+  setLightMarkerMode: (mode: LightMarkerMode) => void;
   addShadowMarkerPosition: (position: ShadowMarker) => void;
   updateShadowMarkers: (markers: ShadowMarker[]) => void;
   removeShadowMarkerPosition: (id: string) => void;
@@ -86,7 +86,7 @@ const useStore = create<Store>((set) => ({
           selected: [],
           blocked: [],
           buildingEditorMode: undefined,
-          shadowMode: undefined,
+          lightMarkerMode: undefined,
           simulationState: 'reset',
           simulationProgress: 0
         }),
@@ -107,8 +107,8 @@ const useStore = create<Store>((set) => ({
   simulationProgress: 0,
   setSimulationProgress: (progress) => set({ simulationProgress: progress }),
   shadowMarkers: [],
-  shadowMode: undefined,
-  setShadowMode: (mode) => set({ shadowMode: mode }),
+  lightMarkerMode: undefined,
+  setLightMarkerMode: (mode) => set({ lightMarkerMode: mode }),
   addShadowMarkerPosition: (marker) =>
     set((state) => ({ shadowMarkers: [...state.shadowMarkers, marker] })),
   updateShadowMarkers: (markers) => set({ shadowMarkers: markers }),
