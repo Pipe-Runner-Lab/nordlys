@@ -6,7 +6,15 @@ function ShadowPanel(): JSX.Element {
   const simulationState = useStore((state) => state.simulationState);
   const setSimulationState = useStore((state) => state.setSimulationState);
   const simulationProgress = useStore((state) => state.simulationProgress);
-  const shadowMarkerPositions = useStore((state) => state.shadowMarkerPositions);
+  const setShadowMode = useStore((state) => state.setShadowMode);
+  const shadowMode = useStore((state) => state.shadowMode);
+  const shadowMarkers = useStore((state) => state.shadowMarkers);
+
+  useEffect(() => {
+    return () => {
+      setShadowMode(undefined);
+    };
+  }, []);
 
   useEffect(() => {
     setSimulationState('reset');
@@ -43,11 +51,23 @@ function ShadowPanel(): JSX.Element {
       </div>
 
       <div className="flex flex-col flex-1 p-2 space-y-2 border border-gray-400 border-solid rounded-md">
-        <div className="flex items-center justify-center w-full py-1 rounded-sm bg-violet-300">
-          Intensity Markers
+        <div className="flex w-full space-x-1 ">
+          <div className="flex items-center justify-center flex-1 py-1 rounded-sm bg-violet-300">
+            Intensity Markers
+          </div>
+          <button
+            onClick={() =>
+              shadowMode === undefined ? setShadowMode('insert') : setShadowMode(undefined)
+            }
+            className={clsx('flex items-center justify-center py-1 rounded-sm w-28', {
+              'bg-green-300 shadow-lg': shadowMode === 'insert',
+              'bg-gray-300 shadow-lg': shadowMode === undefined
+            })}>
+            {shadowMode === undefined ? 'Start Adding' : 'Stop Adding'}
+          </button>
         </div>
         <div className="space-y-1 overflow-auto">
-          {shadowMarkerPositions.map(({ x, z, intensity }, index) => (
+          {shadowMarkers.map(({ x, z, intensity }, index) => (
             <div
               key={index}
               className="flex justify-between px-4 py-1 space-x-2 bg-indigo-200 rounded-sm">

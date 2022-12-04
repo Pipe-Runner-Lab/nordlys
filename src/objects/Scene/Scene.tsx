@@ -8,8 +8,13 @@ import { useControls } from 'leva';
 import LandmarkRayCaster from '../LandmarkRayCaster';
 import useStore from '../../store';
 import ShadowAnalyser from '../ShadowAnalyser';
+import { PerspectiveCamera } from 'three/src/Three';
 
-function Scene(): JSX.Element {
+interface SceneProps {
+  defaultCameraRef: React.RefObject<PerspectiveCamera | null>;
+}
+
+function Scene({ defaultCameraRef }: SceneProps): JSX.Element {
   const { terrainY } = useControls('Terrain', {
     terrainY: { value: -1.5, min: -3, max: 3, label: 'Terrain Y' }
   });
@@ -19,9 +24,10 @@ function Scene(): JSX.Element {
 
   const editMode = useStore((state) => state.editMode);
   const selected = useStore((state) => state.selected);
+  const isMenuOpen = useStore((state) => state.isMenuOpen);
 
-  const isLandmarkModeActive = editMode === 'landmark' && selected.length === 1;
-  const isShadowModeActive = editMode === 'shadow';
+  const isLandmarkModeActive = isMenuOpen && editMode === 'landmark' && selected.length === 1;
+  const isShadowModeActive = isMenuOpen && editMode === 'shadow';
 
   return (
     <>
@@ -39,7 +45,7 @@ function Scene(): JSX.Element {
         />
       )}
 
-      {isShadowModeActive && <ShadowAnalyser />}
+      {isShadowModeActive && <ShadowAnalyser defaultCameraRef={defaultCameraRef} />}
     </>
   );
 }

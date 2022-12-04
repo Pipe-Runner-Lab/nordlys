@@ -1,15 +1,25 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { OrthographicCamera, useHelper } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import { button, useControls } from 'leva';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { CameraHelper } from 'three';
-import { OrthographicCamera as OrthographicCameraType } from 'three/src/Three';
+import { OrthographicCamera as OrthographicCameraType, PerspectiveCamera } from 'three/src/Three';
+import useStore from '../../store/store';
+import { getIntensity } from './utils/intensityCalculator';
 import { renderToJPG } from './utils/screenshot';
 
-function ShadowAnalyser(): JSX.Element {
-  const { gl, scene } = useThree();
-  const shadowCameraRef = React.useRef<OrthographicCameraType>(null);
-  const [exportIt, setExportIt] = useState(false);
+interface ShadowAnalyserProps {
+  defaultCameraRef: React.RefObject<PerspectiveCamera | null>;
+}
+
+function ShadowAnalyser({ defaultCameraRef }: ShadowAnalyserProps): JSX.Element {
+  const { gl, scene, camera } = useThree();
+  const shadowCameraRef = useRef<OrthographicCameraType>(null);
+  const offscreenCanvasRef = useRef<HTMLCanvasElement>(document.createElement('canvas'));
+  const shadowMarkerPositions = useStore((state) => state.shadowMarkers);
+  const updateShadowMarkers = useStore((state) => state.updateShadowMarkers);
+  const frameDeltaSum = useRef<number>(0);
 
   const { left, right, top, bottom, near, far, shouldShowHelper } = useControls('Shadow Analyser', {
     left: { value: 25, min: 0, max: 500 },
@@ -32,16 +42,31 @@ function ShadowAnalyser(): JSX.Element {
     if (shadowCameraRef.current != null) {
       shadowCameraRef.current.lookAt(0, 0, 0);
     }
+
+    // Ensure same height and width as the main canvas
+    offscreenCanvasRef.current.width = gl.domElement.width;
+    offscreenCanvasRef.current.height = gl.domElement.height;
   }, []);
 
-  useFrame(({ scene }, delta) => {
-    if (shadowCameraRef.current != null) {
-      if (exportIt) {
-        renderToJPG(gl, scene, shadowCameraRef.current);
-        setExportIt(false);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (shadowCameraRef.current != null && shadowMarkerPositions.length > 0) {
+        const computedIntensity = getIntensity(
+          gl,
+          offscreenCanvasRef.current,
+          shadowMarkerPositions,
+          scene,
+          shadowCameraRef.current,
+          camera as PerspectiveCamera
+        );
+        gl.render(scene, camera);
+        updateShadowMarkers([...computedIntensity]);
+
+        frameDeltaSum.current = 0;
       }
-    }
-  });
+    }, 500);
+    return () => clearInterval(interval);
+  }, [shadowMarkerPositions]);
 
   return (
     <group>

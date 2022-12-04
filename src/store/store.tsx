@@ -3,7 +3,8 @@ import create from 'zustand';
 // Editor state
 type EditModes = 'buildings' | 'landmark' | 'sky-exposure' | 'shadow';
 type BuildingEditorMode = 'insert' | undefined;
-interface ShadowMarkerPosition {
+type ShadowMode = 'insert' | undefined;
+export interface ShadowMarker {
   id: string;
   x: number;
   z: number;
@@ -54,8 +55,11 @@ interface Store {
   setSimulationState: (movement: simulationState) => void;
   simulationProgress: number;
   setSimulationProgress: (progress: number) => void;
-  shadowMarkerPositions: ShadowMarkerPosition[];
-  addShadowMarkerPosition: (position: ShadowMarkerPosition) => void;
+  shadowMarkers: ShadowMarker[];
+  shadowMode: ShadowMode;
+  setShadowMode: (mode: ShadowMode) => void;
+  addShadowMarkerPosition: (position: ShadowMarker) => void;
+  updateShadowMarkers: (markers: ShadowMarker[]) => void;
   removeShadowMarkerPosition: (id: string) => void;
   clearShadowMarkerPositions: () => void;
 }
@@ -82,6 +86,7 @@ const useStore = create<Store>((set) => ({
           selected: [],
           blocked: [],
           buildingEditorMode: undefined,
+          shadowMode: undefined,
           simulationState: 'reset',
           simulationProgress: 0
         }),
@@ -101,14 +106,17 @@ const useStore = create<Store>((set) => ({
     })),
   simulationProgress: 0,
   setSimulationProgress: (progress) => set({ simulationProgress: progress }),
-  shadowMarkerPositions: [],
-  addShadowMarkerPosition: (position) =>
-    set((state) => ({ shadowMarkerPositions: [...state.shadowMarkerPositions, position] })),
+  shadowMarkers: [],
+  shadowMode: undefined,
+  setShadowMode: (mode) => set({ shadowMode: mode }),
+  addShadowMarkerPosition: (marker) =>
+    set((state) => ({ shadowMarkers: [...state.shadowMarkers, marker] })),
+  updateShadowMarkers: (markers) => set({ shadowMarkers: markers }),
   removeShadowMarkerPosition: (id) =>
     set((state) => ({
-      shadowMarkerPositions: state.shadowMarkerPositions.filter((position) => position.id !== id)
+      shadowMarkers: state.shadowMarkers.filter((marker) => marker.id !== id)
     })),
-  clearShadowMarkerPositions: () => set({ shadowMarkerPositions: [] })
+  clearShadowMarkerPositions: () => set({ shadowMarkers: [] })
 }));
 
 export default useStore;

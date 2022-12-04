@@ -18,6 +18,7 @@ function Terrain({ y }: TerrainProps): JSX.Element {
 
   const editMode = useStore((state) => state.editMode);
   const buildingEditorMode = useStore((state) => state.buildingEditorMode);
+  const shadowMode = useStore((state) => state.shadowMode);
   const isMenuOpen = useStore((state) => state.isMenuOpen);
   const insertBuilding = useStore((state) => state.insertBuilding);
   const editorMarkType = useStore((state) => state.editorMarkType);
@@ -25,7 +26,7 @@ function Terrain({ y }: TerrainProps): JSX.Element {
 
   const isInsertModeActive =
     isMenuOpen && buildingEditorMode === 'insert' && editMode === 'buildings';
-  const isShadowModeActive = editMode === 'shadow' && isMenuOpen;
+  const isShadowModeActive = isMenuOpen && shadowMode === 'insert' && editMode === 'shadow';
 
   useEffect(() => {
     if (editorMarkRef.current != null) {
@@ -34,8 +35,9 @@ function Terrain({ y }: TerrainProps): JSX.Element {
   }, [isInsertModeActive]);
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    helperRef.current!.visible = false;
+    if (helperRef.current != null) {
+      helperRef.current.visible = false;
+    }
   }, [isShadowModeActive]);
 
   const handlePointerMove = useCallback(
