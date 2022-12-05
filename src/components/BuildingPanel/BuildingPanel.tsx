@@ -62,7 +62,8 @@ function BuildingPanel(): JSX.Element {
             'bg-green-300 shadow-lg': buildingEditorMode === 'insert',
             'bg-gray-300 shadow-lg': buildingEditorMode === undefined,
             'bg-gray-200 shadow-sm text-gray-400': isDeleteActive
-          })}>
+          })}
+        >
           Insert Mode
         </button>
         <button
@@ -71,7 +72,8 @@ function BuildingPanel(): JSX.Element {
           className={clsx(
             'h-9 rounded-md  flex-1',
             isDeleteActive ? 'bg-blue-200 shadow-lg' : 'bg-gray-200 shadow-sm text-gray-400'
-          )}>
+          )}
+        >
           Delete
         </button>
       </div>

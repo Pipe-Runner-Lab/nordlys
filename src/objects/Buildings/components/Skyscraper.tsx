@@ -48,7 +48,8 @@ function Skyscraper({
         position={[x, height / 2, z]}
         castShadow
         receiveShadow
-        geometry={nodes['6Story_Stack'].geometry}>
+        geometry={nodes['6Story_Stack'].geometry}
+      >
         {color != null ? (
           <meshBasicMaterial transparent opacity={0.5} color={color} />
         ) : (

@@ -44,7 +44,8 @@ function House({ x = 0, z = 0, id = 'HOUSE', placementMode = false }: HouseProps
         position={[x, height / 2, z]}
         castShadow
         receiveShadow
-        geometry={nodes['1Story'].geometry}>
+        geometry={nodes['1Story'].geometry}
+      >
         {color != null ? (
           <meshBasicMaterial transparent opacity={0.5} color={color} />
         ) : (

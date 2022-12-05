@@ -49,7 +49,8 @@ function Hospital({
         position={[x, height / 2, z]}
         castShadow
         receiveShadow
-        geometry={nodes['4Story'].geometry}>
+        geometry={nodes['4Story'].geometry}
+      >
         {color != null ? (
           <meshBasicMaterial transparent opacity={0.5} color={color} />
         ) : (

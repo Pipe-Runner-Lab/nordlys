@@ -37,7 +37,8 @@ function Buildings({ y }: BuildingsProps, ref: React.Ref<Group>): JSX.Element | 
             isSelectionActive
               ? (selected) => setSelected(selected.map(({ name }) => name))
               : undefined
-          }>
+          }
+        >
           {buildingDataMap.map(({ type, id, x, z }) => {
             switch (type) {
               case 'apartment':

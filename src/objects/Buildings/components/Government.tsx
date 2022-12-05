@@ -49,7 +49,8 @@ function Government({
         position={[x, height / 2, z]}
         castShadow
         receiveShadow
-        geometry={nodes['2Story_Wide'].geometry}>
+        geometry={nodes['2Story_Wide'].geometry}
+      >
         {color != null ? (
           <meshBasicMaterial transparent opacity={0.5} color={color} />
         ) : (

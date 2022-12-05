@@ -49,7 +49,8 @@ function Apartment({
         position={[x, height / 2, z]}
         castShadow
         receiveShadow
-        geometry={nodes['3Story_Balcony'].geometry}>
+        geometry={nodes['3Story_Balcony'].geometry}
+      >
         {color != null ? (
           <meshBasicMaterial transparent opacity={0.5} color={color} />
         ) : (
