@@ -2,10 +2,10 @@ import React from 'react';
 import { BsBuilding as BuildingIcon } from 'react-icons/bs';
 import {
   GiTempleGate as LandMarkIcon,
-  GiStripedSun as SkyExposureIcon,
-  GiTwoShadows as ShadowIcon
+  GiStripedSun as SkyExposureIcon
+  // GiTwoShadows as ShadowIcon
 } from 'react-icons/gi';
-
+import { MdAutoGraph as LightIcon } from 'react-icons/md';
 import { VscChromeClose as CloseIcon } from 'react-icons/vsc';
 import { clsx as cx } from 'clsx';
 import useStore from '../../../store';
@@ -35,7 +35,7 @@ function PrimaryHeader(): JSX.Element {
             'flex items-center justify-center w-10 h-10  rounded-full outline -outline-offset-1 outline-1',
             editMode === 'light' ? 'outline-sky-400 bg-sky-100' : 'outline-gray-300'
           )}>
-          <ShadowIcon
+          <LightIcon
             size={18}
             className={cx(editMode === 'light' ? 'fill-sky-500' : 'fill-gray-400')}
           />

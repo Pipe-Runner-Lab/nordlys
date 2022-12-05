@@ -1,6 +1,9 @@
 import clsx from 'clsx';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import useStore from '../../store';
+import { Column } from '@ant-design/plots';
+import { AiOutlineDelete as DeleteIcon } from 'react-icons/ai';
+import { generateConfig, generateData } from './utils/bar-data-engine';
 
 function LightPanel(): JSX.Element {
   const simulationState = useStore((state) => state.simulationState);
@@ -8,7 +11,8 @@ function LightPanel(): JSX.Element {
   const simulationProgress = useStore((state) => state.simulationProgress);
   const setLightMarkerMode = useStore((state) => state.setLightMarkerMode);
   const lightMarkerMode = useStore((state) => state.lightMarkerMode);
-  const shadowMarkers = useStore((state) => state.shadowMarkers);
+  const lightMarkers = useStore((state) => state.lightMarkers);
+  const removeLightMarker = useStore((state) => state.removeLightMarker);
 
   useEffect(() => {
     return () => {
@@ -19,6 +23,10 @@ function LightPanel(): JSX.Element {
   useEffect(() => {
     setSimulationState('reset');
   }, []);
+
+  const barData = generateData(lightMarkers);
+
+  const barConfig = useMemo(() => generateConfig(), []);
 
   return (
     <div className="flex flex-col flex-1 p-2 space-y-2">
@@ -50,7 +58,7 @@ function LightPanel(): JSX.Element {
         </div>
       </div>
 
-      <div className="flex flex-col flex-1 p-2 space-y-2 border border-gray-400 border-solid rounded-md">
+      <div className="flex flex-col p-2 space-y-2 border border-gray-400 border-solid rounded-md">
         <div className="flex w-full space-x-1 ">
           <div className="flex items-center justify-center flex-1 py-1 rounded-sm bg-violet-300">
             Intensity Markers
@@ -68,16 +76,24 @@ function LightPanel(): JSX.Element {
             {lightMarkerMode === undefined ? 'Start Adding' : 'Stop Adding'}
           </button>
         </div>
-        <div className="space-y-1 overflow-auto">
-          {shadowMarkers.map(({ x, z, intensity }, index) => (
+        <div className="space-y-1 overflow-auto h-[240px] max-h-[240px]">
+          {lightMarkers.map(({ x, z, intensity, id }, index) => (
             <div
               key={index}
-              className="flex justify-between px-4 py-1 space-x-2 bg-indigo-200 rounded-sm">
+              className="flex justify-between py-1 pl-4 pr-2 space-x-2 bg-indigo-200 rounded-sm">
               <div className="flex space-x-8">
-                <div className="text-center">{Math.round(x)}</div>
-                <div className="text-center">{Math.round(z)}</div>
+                <div className="text-center">
+                  ({x.toFixed(2)}, {z.toFixed(2)})
+                </div>
               </div>
-              <div className="text-center">{intensity}</div>
+              <div>
+                <button
+                  className="flex items-center justify-center w-6 bg-red-200 border border-red-400 border-solid rounded-full aspect-square"
+                  onClick={() => removeLightMarker(id)}>
+                  <DeleteIcon className="fill-red-500" />
+                </button>
+              </div>
+              {/* <div className="text-center">{intensity}</div> */}
             </div>
           ))}
         </div>
@@ -86,6 +102,9 @@ function LightPanel(): JSX.Element {
       <div className="flex flex-col flex-1 p-2 space-y-2 border border-gray-400 border-solid rounded-md">
         <div className="flex items-center justify-center w-full py-1 rounded-sm bg-violet-300">
           Light graph
+        </div>
+        <div className="flex items-end justify-center flex-1">
+          <Column height={260} data={barData} xField="position" yField="intensity" {...barConfig} />
         </div>
       </div>
     </div>

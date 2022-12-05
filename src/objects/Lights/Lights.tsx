@@ -68,6 +68,18 @@ function Lights(): JSX.Element {
       directionalLightRef.current.position.lerp(simulationTarget, step);
       accumulator.current += step;
 
+      if (accumulator.current >= 1) {
+        setSimulationProgress(25);
+      }
+
+      if (accumulator.current >= 2) {
+        setSimulationProgress(50);
+      }
+
+      if (accumulator.current >= 3) {
+        setSimulationProgress(75);
+      }
+
       if (accumulator.current >= 4) {
         setSimulationProgress(100);
         setSimulationState('pause'); // call it at the end

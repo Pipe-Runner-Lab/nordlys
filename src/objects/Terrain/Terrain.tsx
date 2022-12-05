@@ -22,7 +22,7 @@ function Terrain({ y }: TerrainProps): JSX.Element {
   const isMenuOpen = useStore((state) => state.isMenuOpen);
   const insertBuilding = useStore((state) => state.insertBuilding);
   const editorMarkType = useStore((state) => state.editorMarkType);
-  const addShadowMarkerPosition = useStore((state) => state.addShadowMarkerPosition);
+  const addLightMarker = useStore((state) => state.addLightMarker);
 
   const isInsertModeActive =
     isMenuOpen && buildingEditorMode === 'insert' && editMode === 'buildings';
@@ -74,7 +74,7 @@ function Terrain({ y }: TerrainProps): JSX.Element {
       }
 
       if (isShadowModeActive) {
-        addShadowMarkerPosition({ x, z, id: uuidv4(), intensity: 0 });
+        addLightMarker({ x, z, id: uuidv4(), intensity: 0 });
       }
     },
     [editorMarkType, isShadowModeActive, isInsertModeActive]

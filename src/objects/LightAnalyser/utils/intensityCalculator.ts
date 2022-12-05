@@ -1,15 +1,15 @@
 import { OrthographicCamera, Scene, WebGLRenderer } from 'three';
 import { PerspectiveCamera } from 'three/src/Three';
-import { ShadowMarker } from '../../../store/store';
+import { LightMarker } from '../../../store/store';
 
 export const getIntensity = (
   gl: WebGLRenderer,
   offscreenCanvas: HTMLCanvasElement,
-  markers: ShadowMarker[],
+  markers: LightMarker[],
   scene: Scene,
   camera: OrthographicCamera,
   defaultCamera: PerspectiveCamera
-): ShadowMarker[] => {
+): LightMarker[] => {
   const ctx = offscreenCanvas.getContext('2d');
 
   if (ctx != null) {

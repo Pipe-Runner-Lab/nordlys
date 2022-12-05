@@ -22,8 +22,9 @@ function ShadowAnalyser({ defaultCameraRef, y }: LightAnalyserProps): JSX.Elemen
   const { gl, scene, camera } = useThree();
   const shadowCameraRef = useRef<OrthographicCameraType>(null);
   const offscreenCanvasRef = useRef<HTMLCanvasElement>(document.createElement('canvas'));
-  const shadowMarkerPositions = useStore((state) => state.shadowMarkers);
-  const updateShadowMarkers = useStore((state) => state.updateShadowMarkers);
+  const lightMarkers = useStore((state) => state.lightMarkers);
+  const updateLightMarkers = useStore((state) => state.updateLightMarkers);
+  const removeLightMarker = useStore((state) => state.removeLightMarker);
   const frameDeltaSum = useRef<number>(0);
 
   const { left, right, top, bottom, near, far, shouldShowHelper } = useControls('Light Analyser', {
@@ -55,23 +56,23 @@ function ShadowAnalyser({ defaultCameraRef, y }: LightAnalyserProps): JSX.Elemen
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (shadowCameraRef.current != null && shadowMarkerPositions.length > 0) {
+      if (shadowCameraRef.current != null && lightMarkers.length > 0) {
         const computedIntensity = getIntensity(
           gl,
           offscreenCanvasRef.current,
-          shadowMarkerPositions,
+          lightMarkers,
           scene,
           shadowCameraRef.current,
           camera as PerspectiveCamera
         );
         gl.render(scene, camera);
-        updateShadowMarkers([...computedIntensity]);
+        updateLightMarkers([...computedIntensity]);
 
         frameDeltaSum.current = 0;
       }
     }, 250);
     return () => clearInterval(interval);
-  }, [shadowMarkerPositions]);
+  }, [lightMarkers]);
 
   return (
     <>
@@ -89,8 +90,8 @@ function ShadowAnalyser({ defaultCameraRef, y }: LightAnalyserProps): JSX.Elemen
         />
       </group>
 
-      {shadowMarkerPositions.map((marker) => {
-        const color = marker.intensity > 0.5 ? 'green' : 'red';
+      {lightMarkers.map((marker) => {
+        const color = marker.intensity > 0.1 ? 'green' : 'red';
         return (
           <arrowHelper
             key={marker.id}

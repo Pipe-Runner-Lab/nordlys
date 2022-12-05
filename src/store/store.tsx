@@ -4,7 +4,7 @@ import create from 'zustand';
 type EditModes = 'buildings' | 'landmark' | 'sky-exposure' | 'light';
 type BuildingEditorMode = 'insert' | undefined;
 type LightMarkerMode = 'insert' | undefined;
-export interface ShadowMarker {
+export interface LightMarker {
   id: string;
   x: number;
   z: number;
@@ -55,12 +55,12 @@ interface Store {
   setSimulationState: (movement: simulationState) => void;
   simulationProgress: number;
   setSimulationProgress: (progress: number) => void;
-  shadowMarkers: ShadowMarker[];
+  lightMarkers: LightMarker[];
   lightMarkerMode: LightMarkerMode;
   setLightMarkerMode: (mode: LightMarkerMode) => void;
-  addShadowMarkerPosition: (position: ShadowMarker) => void;
-  updateShadowMarkers: (markers: ShadowMarker[]) => void;
-  removeShadowMarkerPosition: (id: string) => void;
+  addLightMarker: (position: LightMarker) => void;
+  updateLightMarkers: (markers: LightMarker[]) => void;
+  removeLightMarker: (id: string) => void;
   clearShadowMarkerPositions: () => void;
 }
 
@@ -106,17 +106,16 @@ const useStore = create<Store>((set) => ({
     })),
   simulationProgress: 0,
   setSimulationProgress: (progress) => set({ simulationProgress: progress }),
-  shadowMarkers: [],
+  lightMarkers: [],
   lightMarkerMode: undefined,
   setLightMarkerMode: (mode) => set({ lightMarkerMode: mode }),
-  addShadowMarkerPosition: (marker) =>
-    set((state) => ({ shadowMarkers: [...state.shadowMarkers, marker] })),
-  updateShadowMarkers: (markers) => set({ shadowMarkers: markers }),
-  removeShadowMarkerPosition: (id) =>
+  addLightMarker: (marker) => set((state) => ({ lightMarkers: [...state.lightMarkers, marker] })),
+  updateLightMarkers: (markers) => set({ lightMarkers: markers }),
+  removeLightMarker: (id) =>
     set((state) => ({
-      shadowMarkers: state.shadowMarkers.filter((marker) => marker.id !== id)
+      lightMarkers: state.lightMarkers.filter((marker) => marker.id !== id)
     })),
-  clearShadowMarkerPositions: () => set({ shadowMarkers: [] })
+  clearShadowMarkerPositions: () => set({ lightMarkers: [] })
 }));
 
 export default useStore;
