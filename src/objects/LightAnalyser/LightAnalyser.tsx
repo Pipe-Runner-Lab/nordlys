@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { OrthographicCamera, useHelper } from '@react-three/drei';
-import { useFrame, useThree } from '@react-three/fiber';
+import { useThree } from '@react-three/fiber';
 import { button, useControls } from 'leva';
 import React, { useEffect, useRef } from 'react';
 import {
@@ -14,17 +14,15 @@ import { getIntensity } from './utils/intensityCalculator';
 import { renderToJPG } from './utils/screenshot';
 
 interface LightAnalyserProps {
-  defaultCameraRef: React.RefObject<PerspectiveCamera | null>;
   y: number;
 }
 
-function ShadowAnalyser({ defaultCameraRef, y }: LightAnalyserProps): JSX.Element {
+function ShadowAnalyser({ y }: LightAnalyserProps): JSX.Element {
   const { gl, scene, camera } = useThree();
   const shadowCameraRef = useRef<OrthographicCameraType>(null);
   const offscreenCanvasRef = useRef<HTMLCanvasElement>(document.createElement('canvas'));
   const lightMarkers = useStore((state) => state.lightMarkers);
   const updateLightMarkers = useStore((state) => state.updateLightMarkers);
-  const removeLightMarker = useStore((state) => state.removeLightMarker);
   const frameDeltaSum = useRef<number>(0);
 
   const { left, right, top, bottom, near, far, shouldShowHelper } = useControls('Light Analyser', {
@@ -65,7 +63,7 @@ function ShadowAnalyser({ defaultCameraRef, y }: LightAnalyserProps): JSX.Elemen
           shadowCameraRef.current,
           camera as PerspectiveCamera
         );
-        gl.render(scene, camera);
+        // gl.render(scene, camera);
         updateLightMarkers([...computedIntensity]);
 
         frameDeltaSum.current = 0;

@@ -1,15 +1,8 @@
 import create from 'zustand';
 
 // Editor state
-type EditModes = 'buildings' | 'landmark' | 'sky-exposure' | 'light';
+type EditModes = 'buildings' | 'landmark' | 'sky-exposure' | 'light' | 'shadow';
 type BuildingEditorMode = 'insert' | undefined;
-type LightMarkerMode = 'insert' | undefined;
-export interface LightMarker {
-  id: string;
-  x: number;
-  z: number;
-  intensity: number;
-}
 
 // Building Data
 export type BuildingType =
@@ -30,8 +23,20 @@ export interface BuildingData {
   type: BuildingType;
 }
 
-// Shadow Data
+// Simulation Data
 type simulationState = 'play' | 'pause' | 'reset';
+
+// Light Data
+type LightMarkerMode = 'insert' | undefined;
+export interface LightMarker {
+  id: string;
+  x: number;
+  z: number;
+  intensity: number;
+}
+
+// Shadow Data
+export type ShadowHeatMap = Array<{ x: number; z: number; value: number }>;
 
 interface Store {
   buildingDataMap: BuildingData[];
@@ -62,6 +67,8 @@ interface Store {
   updateLightMarkers: (markers: LightMarker[]) => void;
   removeLightMarker: (id: string) => void;
   clearShadowMarkerPositions: () => void;
+  shadowHeatMap: ShadowHeatMap;
+  setShadowHeatMap: (heatMap: ShadowHeatMap) => void;
 }
 
 const useStore = create<Store>((set) => ({
@@ -115,7 +122,9 @@ const useStore = create<Store>((set) => ({
     set((state) => ({
       lightMarkers: state.lightMarkers.filter((marker) => marker.id !== id)
     })),
-  clearShadowMarkerPositions: () => set({ lightMarkers: [] })
+  clearShadowMarkerPositions: () => set({ lightMarkers: [] }),
+  shadowHeatMap: [],
+  setShadowHeatMap: (heatMap) => set({ shadowHeatMap: heatMap })
 }));
 
 export default useStore;

@@ -4,11 +4,10 @@ import useStore from '../../store';
 import { Column } from '@ant-design/plots';
 import { AiOutlineDelete as DeleteIcon } from 'react-icons/ai';
 import { generateConfig, generateData } from './utils/bar-data-engine';
+import SimulationControls from '../SimulationControls';
 
 function LightPanel(): JSX.Element {
-  const simulationState = useStore((state) => state.simulationState);
   const setSimulationState = useStore((state) => state.setSimulationState);
-  const simulationProgress = useStore((state) => state.simulationProgress);
   const setLightMarkerMode = useStore((state) => state.setLightMarkerMode);
   const lightMarkerMode = useStore((state) => state.lightMarkerMode);
   const lightMarkers = useStore((state) => state.lightMarkers);
@@ -30,33 +29,7 @@ function LightPanel(): JSX.Element {
 
   return (
     <div className="flex flex-col flex-1 p-2 space-y-2">
-      <div className="flex space-x-2">
-        <button
-          disabled={simulationProgress === 100}
-          onClick={() => {
-            simulationState === 'play' ? setSimulationState('pause') : setSimulationState('play');
-          }}
-          className={clsx('h-9 rounded-md flex-1', {
-            'bg-green-300 shadow-lg': simulationProgress < 100,
-            'bg-gray-200 shadow-sm text-gray-400': simulationProgress === 100
-          })}>
-          {simulationState === 'play' ? 'Pause' : 'Play'}
-        </button>
-        <button
-          onClick={() => {
-            setSimulationState('reset');
-          }}
-          className="flex-1 bg-red-300 rounded-md shadow-lg h-9">
-          Reset
-        </button>
-      </div>
-      <div>
-        <div className="w-full bg-blue-300 rounded-full h-1.5 mt-1 mb-2">
-          <div
-            className="bg-blue-500 h-1.5 rounded-full"
-            style={{ width: `${simulationProgress}%` }}></div>
-        </div>
-      </div>
+      <SimulationControls />
 
       <div className="flex flex-col p-2 space-y-2 border border-gray-400 border-solid rounded-md">
         <div className="flex w-full space-x-1 ">

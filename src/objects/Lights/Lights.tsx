@@ -14,6 +14,9 @@ import {
 import useStore from '../../store';
 
 const simulationTarget = new Vector3(-24, 24, -24);
+const maxSimAccumulator = 4;
+const minSimAccumulator = 0;
+const progressUpdateFactor = 2;
 
 function Lights(): JSX.Element {
   const directionalLightRef = useRef<DirectionalLight>(null);
@@ -47,20 +50,13 @@ function Lights(): JSX.Element {
   const simulationState = useStore((state) => state.simulationState);
   const setSimulationState = useStore((state) => state.setSimulationState);
   const setSimulationProgress = useStore((state) => state.setSimulationProgress);
-  const simulationProgress = useStore((state) => state.simulationProgress);
 
   useEffect(() => {
     if (simulationState === 'reset' && directionalLightRef.current != null) {
       directionalLightRef.current.position.set(...position);
-      accumulator.current = 0;
+      accumulator.current = minSimAccumulator;
     }
   }, [simulationState]);
-
-  const target = useMemo(() => {
-    const target = new Object3D();
-    target.position.set(0, 0, 0);
-    return target;
-  }, []);
 
   useFrame((state, delta) => {
     if (simulationState === 'play' && directionalLightRef.current != null) {
@@ -68,24 +64,26 @@ function Lights(): JSX.Element {
       directionalLightRef.current.position.lerp(simulationTarget, step);
       accumulator.current += step;
 
-      if (accumulator.current >= 1) {
-        setSimulationProgress(25);
+      const progress = Math.round(
+        (accumulator.current * 100) / (maxSimAccumulator - minSimAccumulator)
+      );
+
+      if (progress <= 100 && progress >= 0 && progress % progressUpdateFactor === 0) {
+        setSimulationProgress(progress);
       }
 
-      if (accumulator.current >= 2) {
-        setSimulationProgress(50);
-      }
-
-      if (accumulator.current >= 3) {
-        setSimulationProgress(75);
-      }
-
-      if (accumulator.current >= 4) {
+      if (accumulator.current >= maxSimAccumulator) {
         setSimulationProgress(100);
         setSimulationState('pause'); // call it at the end
       }
     }
   });
+
+  const target = useMemo(() => {
+    const target = new Object3D();
+    target.position.set(0, 0, 0);
+    return target;
+  }, []);
 
   return (
     <>

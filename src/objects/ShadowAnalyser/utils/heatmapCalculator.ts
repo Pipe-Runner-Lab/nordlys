@@ -1,15 +1,27 @@
 import { OrthographicCamera, Scene, WebGLRenderer } from 'three';
 import { PerspectiveCamera } from 'three/src/Three';
-import { LightMarker } from '../../../store/store';
 
-export const getIntensity = (
+export const R = 20;
+export const numberOfPoints = R * R;
+const parkMarkers: Array<[number, number]> = [];
+
+for (let i = 0; i < numberOfPoints; i++) {
+  const r = Math.floor(i / R);
+  const c = i % R;
+
+  const x = r / R;
+  const z = c / R;
+  parkMarkers.push([x, z]);
+}
+
+export const getHeatMap = (
   gl: WebGLRenderer,
   offscreenCanvas: HTMLCanvasElement,
-  markers: LightMarker[],
   scene: Scene,
   camera: OrthographicCamera,
-  defaultCamera: PerspectiveCamera
-): LightMarker[] => {
+  defaultCamera: PerspectiveCamera,
+  oldMap: number[]
+): number[] => {
   const ctx = offscreenCanvas.getContext('2d', { willReadFrequently: true });
 
   if (ctx != null) {
@@ -18,19 +30,19 @@ export const getIntensity = (
     ctx.drawImage(mainCanvas, 0, 0);
     gl.render(scene, defaultCamera);
 
-    markers.forEach((marker) => {
+    parkMarkers.forEach(([xN, zN], idx) => {
       // Need to normalize position to canvas size
-      const canvasX = ((marker.x + 25) / 50) * mainCanvas.width;
-      const canvasY = ((marker.z + 25) / 50) * mainCanvas.height;
+      const canvasX = xN * mainCanvas.width;
+      const canvasY = zN * mainCanvas.height;
 
       const imageData = ctx.getImageData(canvasX, canvasY, 1, 1);
       const c = imageData.data;
       const intensity = (65536 * c[0] + 256 * c[1] + c[2]) / 256 / 256 / 256;
-      marker.intensity = intensity;
+      oldMap[idx] += intensity;
     });
 
-    return markers;
+    return oldMap;
   }
 
-  return markers;
+  return oldMap;
 };

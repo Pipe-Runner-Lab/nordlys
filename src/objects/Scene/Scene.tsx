@@ -3,17 +3,14 @@ import React, { useRef } from 'react';
 import Buildings from '../Buildings';
 import Terrain from '../Terrain';
 import Park from '../Park';
-import { Group, PerspectiveCamera } from 'three';
+import { Group } from 'three';
 import { useControls } from 'leva';
 import LandmarkRayCaster from '../LandmarkRayCaster';
 import useStore from '../../store';
 import LightAnalyser from '../LightAnalyser';
+import ShadowAnalyser from '../ShadowAnalyser';
 
-interface SceneProps {
-  defaultCameraRef: React.RefObject<PerspectiveCamera | null>;
-}
-
-function Scene({ defaultCameraRef }: SceneProps): JSX.Element {
+function Scene(): JSX.Element {
   const { terrainY } = useControls('Terrain', {
     terrainY: { value: -1.5, min: -3, max: 3, label: 'Terrain Y' }
   });
@@ -27,6 +24,7 @@ function Scene({ defaultCameraRef }: SceneProps): JSX.Element {
 
   const isLandmarkModeActive = isMenuOpen && editMode === 'landmark' && selected.length === 1;
   const isLightModeActive = isMenuOpen && editMode === 'light';
+  const isShadowModeActive = isMenuOpen && editMode === 'shadow';
 
   return (
     <>
@@ -44,7 +42,8 @@ function Scene({ defaultCameraRef }: SceneProps): JSX.Element {
         />
       )}
 
-      {isLightModeActive && <LightAnalyser y={terrainY} defaultCameraRef={defaultCameraRef} />}
+      {isLightModeActive && <LightAnalyser y={terrainY} />}
+      {isShadowModeActive && <ShadowAnalyser />}
     </>
   );
 }

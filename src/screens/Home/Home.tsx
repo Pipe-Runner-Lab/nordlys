@@ -25,7 +25,7 @@ function Home(): JSX.Element {
         />
         <Lights />
         {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
-        <Scene defaultCameraRef={defaultCameraRef} />
+        <Scene />
 
         {/* Utilities */}
         <Controls />
