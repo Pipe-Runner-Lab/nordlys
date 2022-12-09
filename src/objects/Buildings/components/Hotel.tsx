@@ -9,6 +9,7 @@ interface HotelProps {
   z?: number;
   id?: string;
   placementMode?: boolean;
+  rotationY?: number;
 }
 
 type GLTFResult = GLTF & {
@@ -21,7 +22,13 @@ type GLTFResult = GLTF & {
   };
 };
 
-function Hotel({ x = 0, z = 0, id = 'HOTEL', placementMode = false }: HotelProps): JSX.Element {
+function Hotel({
+  x = 0,
+  z = 0,
+  id = 'HOTEL',
+  placementMode = false,
+  rotationY = 0
+}: HotelProps): JSX.Element {
   const height = 0;
 
   const { nodes } = useGLTF(
@@ -42,10 +49,10 @@ function Hotel({ x = 0, z = 0, id = 'HOTEL', placementMode = false }: HotelProps
       <mesh
         name={id}
         position={[x, height / 2, z]}
+        rotation-y={rotationY}
         castShadow
         receiveShadow
-        geometry={nodes['4Story_Wide_2Doors_Roof'].geometry}
-      >
+        geometry={nodes['4Story_Wide_2Doors_Roof'].geometry}>
         {color != null ? (
           <meshBasicMaterial transparent opacity={0.5} color={color} />
         ) : (

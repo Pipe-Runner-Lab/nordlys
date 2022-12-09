@@ -76,7 +76,7 @@ function LandmarkRayCaster({
       vectors.push(vector);
     }
     return vectors;
-  }, [buildingMeshes, landmarkData]);
+  }, []);
 
   /**
    * Move a single raycaster around to find the closest building
@@ -86,8 +86,8 @@ function LandmarkRayCaster({
       const blockedBuildingIds: Record<string, boolean> = {};
       const filteredBuildingMeshes = buildingMeshes.filter((mesh) => mesh.name !== landmarkData.id);
 
+      raycasterRef.current.ray.origin.set(rayOrigin.x, castHeight, rayOrigin.z);
       directionsVectors.forEach((direction) => {
-        raycasterRef.current.ray.origin.set(rayOrigin.x, castHeight, rayOrigin.z);
         raycasterRef.current.ray.direction.set(direction.x, 0, direction.z);
 
         const intersects = raycasterRef.current.intersectObjects(filteredBuildingMeshes);

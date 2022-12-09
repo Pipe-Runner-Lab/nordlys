@@ -9,6 +9,7 @@ import LandmarkRayCaster from '../LandmarkRayCaster';
 import useStore from '../../store';
 import LightAnalyser from '../LightAnalyser';
 import ShadowAnalyser from '../ShadowAnalyser';
+import SkyExposureAnalyser from '../SkyExposureAnalyser';
 
 function Scene(): JSX.Element {
   const { terrainY } = useControls('Terrain', {
@@ -25,6 +26,7 @@ function Scene(): JSX.Element {
   const isLandmarkModeActive = isMenuOpen && editMode === 'landmark' && selected.length === 1;
   const isLightModeActive = isMenuOpen && editMode === 'light';
   const isShadowModeActive = isMenuOpen && editMode === 'shadow';
+  const isSkyModeActive = isMenuOpen && editMode === 'sky-exposure';
 
   return (
     <>
@@ -44,6 +46,7 @@ function Scene(): JSX.Element {
 
       {isLightModeActive && <LightAnalyser y={terrainY} />}
       {isShadowModeActive && <ShadowAnalyser />}
+      {isSkyModeActive && <SkyExposureAnalyser buildingsRef={buildingsRef} y={terrainY} />}
     </>
   );
 }

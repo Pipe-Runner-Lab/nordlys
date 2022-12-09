@@ -17,8 +17,6 @@ const subDivisionH = Number((parkSize.h / R).toFixed(2));
 const xAxisAdjustment = parkPositions.x - parkSize.w / 2 + 0.5;
 const zAxisAdjustment = parkPositions.z - parkSize.h / 2 + 0.5;
 
-console.log(subDivisionW, subDivisionH, xAxisAdjustment, zAxisAdjustment);
-
 function ShadowAnalyser(): JSX.Element {
   const { gl, scene, camera } = useThree();
   const shadowCameraRef = useRef<OrthographicCameraType>(null);

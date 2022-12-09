@@ -9,6 +9,7 @@ interface ApartmentProps {
   z?: number;
   id?: string;
   placementMode?: boolean;
+  rotationY?: number;
 }
 
 type GLTFResult = GLTF & {
@@ -25,7 +26,8 @@ function Hospital({
   x = 0,
   z = 0,
   id = 'HOSPITAL',
-  placementMode = false
+  placementMode = false,
+  rotationY = 0
 }: ApartmentProps): JSX.Element {
   const height = 0;
 
@@ -50,7 +52,7 @@ function Hospital({
         castShadow
         receiveShadow
         geometry={nodes['4Story'].geometry}
-      >
+        rotation-y={rotationY}>
         {color != null ? (
           <meshBasicMaterial transparent opacity={0.5} color={color} />
         ) : (

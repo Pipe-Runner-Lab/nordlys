@@ -8,6 +8,7 @@ interface GovernmentProps {
   x?: number;
   z?: number;
   id?: string;
+  rotationY?: number;
   placementMode?: boolean;
 }
 
@@ -25,7 +26,8 @@ function Government({
   x = 0,
   z = 0,
   id = 'GOVERNMENT',
-  placementMode = false
+  placementMode = false,
+  rotationY = 0
 }: GovernmentProps): JSX.Element {
   const height = 0;
 
@@ -50,7 +52,7 @@ function Government({
         castShadow
         receiveShadow
         geometry={nodes['2Story_Wide'].geometry}
-      >
+        rotation-y={rotationY}>
         {color != null ? (
           <meshBasicMaterial transparent opacity={0.5} color={color} />
         ) : (

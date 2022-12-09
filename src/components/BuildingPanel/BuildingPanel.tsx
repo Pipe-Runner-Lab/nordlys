@@ -21,8 +21,8 @@ function BuildingPanel(): JSX.Element {
   const setBuildingEditorMode = useStore((state) => state.setBuildingEditorMode);
   const selected = useStore((state) => state.selected);
   const clearSelected = useStore((state) => state.clearSelected);
-  const setEditorMarkType = useStore((state) => state.setEditorMarkType);
-  const editorMarkType = useStore((state) => state.editorMarkType);
+  const setEditorMark = useStore((state) => state.setEditorMark);
+  const editorMark = useStore((state) => state.editorMark);
 
   useEffect(() => {
     return () => {
@@ -45,9 +45,9 @@ function BuildingPanel(): JSX.Element {
       <div>
         <Select
           options={options}
-          value={options.find((option) => option.value === editorMarkType)}
-          defaultValue={options.find((option) => option.value === editorMarkType)}
-          onChange={(item) => item != null && setEditorMarkType(item.value)}
+          value={options.find((option) => option.value === editorMark.type)}
+          defaultValue={options.find((option) => option.value === editorMark.type)}
+          onChange={(item) => item != null && setEditorMark({ type: item.value })}
         />
       </div>
       <div className="flex flex-row space-x-2">
@@ -62,8 +62,7 @@ function BuildingPanel(): JSX.Element {
             'bg-green-300 shadow-lg': buildingEditorMode === 'insert',
             'bg-gray-300 shadow-lg': buildingEditorMode === undefined,
             'bg-gray-200 shadow-sm text-gray-400': isDeleteActive
-          })}
-        >
+          })}>
           Insert Mode
         </button>
         <button
@@ -72,8 +71,7 @@ function BuildingPanel(): JSX.Element {
           className={clsx(
             'h-9 rounded-md  flex-1',
             isDeleteActive ? 'bg-blue-200 shadow-lg' : 'bg-gray-200 shadow-sm text-gray-400'
-          )}
-        >
+          )}>
           Delete
         </button>
       </div>

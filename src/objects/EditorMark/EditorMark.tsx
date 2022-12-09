@@ -15,30 +15,30 @@ interface EditorMarkProps {
 }
 
 function EditorMark({ y }: EditorMarkProps, ref?: React.Ref<Group>): JSX.Element {
-  const editorMarkType = useStore((state) => state.editorMarkType);
+  const editorMark = useStore((state) => state.editorMark);
 
   const MarkComponent = useCallback((): JSX.Element | null => {
-    switch (editorMarkType) {
+    switch (editorMark.type) {
       case 'apartment':
-        return <Apartment placementMode />;
+        return <Apartment placementMode rotationY={editorMark.rotationY} />;
       case 'office':
-        return <Office placementMode />;
+        return <Office placementMode rotationY={editorMark.rotationY} />;
       case 'skyscraper':
-        return <Skyscraper placementMode />;
+        return <Skyscraper placementMode rotationY={editorMark.rotationY} />;
       case 'hotel':
-        return <Hotel placementMode />;
+        return <Hotel placementMode rotationY={editorMark.rotationY} />;
       case 'government':
-        return <Government placementMode />;
+        return <Government placementMode rotationY={editorMark.rotationY} />;
       case 'house':
-        return <House placementMode />;
+        return <House placementMode rotationY={editorMark.rotationY} />;
       case 'shop':
-        return <Shop placementMode />;
+        return <Shop placementMode rotationY={editorMark.rotationY} />;
       case 'hospital':
-        return <Hospital placementMode />;
+        return <Hospital placementMode rotationY={editorMark.rotationY} />;
       default:
         return null;
     }
-  }, [editorMarkType]);
+  }, [editorMark]);
 
   return (
     <group visible={false} ref={ref} position={[0, y, 0]}>

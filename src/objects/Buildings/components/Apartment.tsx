@@ -7,6 +7,7 @@ interface ApartmentProps {
   x?: number;
   z?: number;
   id?: string;
+  rotationY?: number;
   placementMode?: boolean;
 }
 
@@ -26,6 +27,7 @@ const texturePath = process.env.PUBLIC_URL + '/assets/apartment/Texture_Green.pn
 function Apartment({
   x = 0,
   z = 0,
+  rotationY = 0,
   id = 'APARTMENT',
   placementMode = false
 }: ApartmentProps): JSX.Element {
@@ -47,10 +49,10 @@ function Apartment({
       <mesh
         name={id}
         position={[x, height / 2, z]}
+        rotation-y={rotationY}
         castShadow
         receiveShadow
-        geometry={nodes['3Story_Balcony'].geometry}
-      >
+        geometry={nodes['3Story_Balcony'].geometry}>
         {color != null ? (
           <meshBasicMaterial transparent opacity={0.5} color={color} />
         ) : (

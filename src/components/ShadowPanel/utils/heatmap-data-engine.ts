@@ -11,7 +11,6 @@ export const generateData = (
   }));
 
   output = output.reverse();
-  console.log(output);
   const firstR = output.splice(0, R);
   output = [...firstR.reverse(), ...output];
   return output;

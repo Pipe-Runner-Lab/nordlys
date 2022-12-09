@@ -9,6 +9,7 @@ interface ShopProps {
   z?: number;
   id?: string;
   placementMode?: boolean;
+  rotationY?: number;
 }
 
 type GLTFResult = GLTF & {
@@ -21,7 +22,13 @@ type GLTFResult = GLTF & {
   };
 };
 
-function Shop({ x = 0, z = 0, id = 'SHOP', placementMode = false }: ShopProps): JSX.Element {
+function Shop({
+  x = 0,
+  z = 0,
+  id = 'SHOP',
+  placementMode = false,
+  rotationY = 0
+}: ShopProps): JSX.Element {
   const height = 0;
 
   const { nodes } = useGLTF(
@@ -45,7 +52,7 @@ function Shop({ x = 0, z = 0, id = 'SHOP', placementMode = false }: ShopProps): 
         castShadow
         receiveShadow
         geometry={nodes['2Story_Sign'].geometry}
-      >
+        rotation-y={rotationY}>
         {color != null ? (
           <meshBasicMaterial transparent opacity={0.5} color={color} />
         ) : (

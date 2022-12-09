@@ -9,6 +9,7 @@ interface OfficeProps {
   z?: number;
   id?: string;
   placementMode?: boolean;
+  rotationY?: number;
 }
 
 type GLTFResult = GLTF & {
@@ -24,7 +25,13 @@ type GLTFResult = GLTF & {
 const modelPath = process.env.PUBLIC_URL + '/assets/office/office.glb';
 const texturePath = process.env.PUBLIC_URL + '/assets/office/Texture_Light2.png';
 
-function Office({ x = 0, z = 0, id = 'HOTEL', placementMode = false }: OfficeProps): JSX.Element {
+function Office({
+  x = 0,
+  z = 0,
+  id = 'HOTEL',
+  placementMode = false,
+  rotationY = 0
+}: OfficeProps): JSX.Element {
   const height = 0;
 
   const { nodes } = useGLTF(modelPath) as unknown as GLTFResult;
@@ -46,7 +53,7 @@ function Office({ x = 0, z = 0, id = 'HOTEL', placementMode = false }: OfficePro
         castShadow
         receiveShadow
         geometry={nodes['2Story_Wide_2Doors'].geometry}
-      >
+        rotation-y={rotationY}>
         {color != null ? (
           <meshBasicMaterial transparent opacity={0.5} color={color} />
         ) : (

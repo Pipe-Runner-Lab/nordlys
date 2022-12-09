@@ -1,4 +1,5 @@
 import create from 'zustand';
+import { defaultCity } from '../constants/defaultCity';
 
 // Editor state
 type EditModes = 'buildings' | 'landmark' | 'sky-exposure' | 'light' | 'shadow';
@@ -20,6 +21,7 @@ export interface BuildingData {
   x: number;
   y: number;
   z: number;
+  rotationY?: number;
   type: BuildingType;
 }
 
@@ -38,14 +40,23 @@ export interface LightMarker {
 // Shadow Data
 export type ShadowHeatMap = Array<{ x: number; z: number; value: number }>;
 
+// Light Data
+type SkyMarkerMode = 'insert' | undefined;
+export interface SkyMarker {
+  id: string;
+  x: number;
+  z: number;
+  exposure: number;
+}
+
 interface Store {
   buildingDataMap: BuildingData[];
   insertBuilding: (args: BuildingData) => void;
   removeBuilding: (id: string) => void;
   editMode: EditModes;
   setEditMode: (mode: EditModes) => void;
-  editorMarkType: BuildingType;
-  setEditorMarkType: (type: BuildingType) => void;
+  editorMark: { type: BuildingType; rotationY?: number };
+  setEditorMark: (args: { type: BuildingType; rotationY?: number }) => void;
   isMenuOpen: boolean;
   setIsMenuOpen: (isOpen: boolean) => void;
   buildingEditorMode: BuildingEditorMode;
@@ -66,13 +77,18 @@ interface Store {
   addLightMarker: (position: LightMarker) => void;
   updateLightMarkers: (markers: LightMarker[]) => void;
   removeLightMarker: (id: string) => void;
-  clearShadowMarkerPositions: () => void;
   shadowHeatMap: ShadowHeatMap;
   setShadowHeatMap: (heatMap: ShadowHeatMap) => void;
+  skyMarkers: SkyMarker[];
+  skyMarkerMode: SkyMarkerMode;
+  setSkyMarkerMode: (mode: SkyMarkerMode) => void;
+  addSkyMarker: (position: SkyMarker) => void;
+  updateSkyMarkers: (markers: SkyMarker[]) => void;
+  removeSkyMarker: (id: string) => void;
 }
 
 const useStore = create<Store>((set) => ({
-  buildingDataMap: [],
+  buildingDataMap: defaultCity as BuildingData[],
   insertBuilding: (building) =>
     set((state) => ({ buildingDataMap: [...state.buildingDataMap, building] })),
   removeBuilding: (id) =>
@@ -81,8 +97,8 @@ const useStore = create<Store>((set) => ({
     })),
   editMode: 'buildings',
   setEditMode: (mode) => set({ editMode: mode }),
-  editorMarkType: 'apartment',
-  setEditorMarkType: (type) => set({ editorMarkType: type }),
+  editorMark: { type: 'apartment' },
+  setEditorMark: (args) => set({ editorMark: args }),
   isMenuOpen: false,
   // * We reset everything when we close the menu
   setIsMenuOpen: (isOpen) =>
@@ -94,6 +110,7 @@ const useStore = create<Store>((set) => ({
           blocked: [],
           buildingEditorMode: undefined,
           lightMarkerMode: undefined,
+          skyMarkerMode: undefined,
           simulationState: 'reset',
           simulationProgress: 0
         }),
@@ -105,6 +122,7 @@ const useStore = create<Store>((set) => ({
   blocked: [],
   setBlocked: (ids) => set({ blocked: ids }),
   clearBlocked: () => set({ blocked: [] }),
+
   simulationState: 'reset',
   setSimulationState: (movement) =>
     set((state) => ({
@@ -113,6 +131,7 @@ const useStore = create<Store>((set) => ({
     })),
   simulationProgress: 0,
   setSimulationProgress: (progress) => set({ simulationProgress: progress }),
+
   lightMarkers: [],
   lightMarkerMode: undefined,
   setLightMarkerMode: (mode) => set({ lightMarkerMode: mode }),
@@ -122,9 +141,19 @@ const useStore = create<Store>((set) => ({
     set((state) => ({
       lightMarkers: state.lightMarkers.filter((marker) => marker.id !== id)
     })),
-  clearShadowMarkerPositions: () => set({ lightMarkers: [] }),
+
   shadowHeatMap: [],
-  setShadowHeatMap: (heatMap) => set({ shadowHeatMap: heatMap })
+  setShadowHeatMap: (heatMap) => set({ shadowHeatMap: heatMap }),
+
+  skyMarkers: [],
+  skyMarkerMode: undefined,
+  setSkyMarkerMode: (mode) => set({ skyMarkerMode: mode }),
+  addSkyMarker: (marker) => set((state) => ({ skyMarkers: [...state.skyMarkers, marker] })),
+  updateSkyMarkers: (markers) => set({ skyMarkers: markers }),
+  removeSkyMarker: (id) =>
+    set((state) => ({
+      skyMarkers: state.skyMarkers.filter((marker) => marker.id !== id)
+    }))
 }));
 
 export default useStore;

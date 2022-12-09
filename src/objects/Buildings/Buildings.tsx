@@ -37,26 +37,25 @@ function Buildings({ y }: BuildingsProps, ref: React.Ref<Group>): JSX.Element | 
             isSelectionActive
               ? (selected) => setSelected(selected.map(({ name }) => name))
               : undefined
-          }
-        >
-          {buildingDataMap.map(({ type, id, x, z }) => {
+          }>
+          {buildingDataMap.map(({ type, id, x, z, rotationY }) => {
             switch (type) {
               case 'apartment':
-                return <Apartment id={id} key={id} x={x} z={z} />;
+                return <Apartment id={id} key={id} x={x} z={z} rotationY={rotationY} />;
               case 'office':
-                return <Office id={id} key={id} x={x} z={z} />;
+                return <Office id={id} key={id} x={x} z={z} rotationY={rotationY} />;
               case 'skyscraper':
-                return <Skyscraper id={id} key={id} x={x} z={z} />;
+                return <Skyscraper id={id} key={id} x={x} z={z} rotationY={rotationY} />;
               case 'hotel':
-                return <Hotel id={id} key={id} x={x} z={z} />;
+                return <Hotel id={id} key={id} x={x} z={z} rotationY={rotationY} />;
               case 'government':
-                return <Government id={id} key={id} x={x} z={z} />;
+                return <Government id={id} key={id} x={x} z={z} rotationY={rotationY} />;
               case 'house':
-                return <House id={id} key={id} x={x} z={z} />;
+                return <House id={id} key={id} x={x} z={z} rotationY={rotationY} />;
               case 'shop':
-                return <Shop id={id} key={id} x={x} z={z} />;
+                return <Shop id={id} key={id} x={x} z={z} rotationY={rotationY} />;
               case 'hospital':
-                return <Hospital id={id} key={id} x={x} z={z} />;
+                return <Hospital id={id} key={id} x={x} z={z} rotationY={rotationY} />;
               default:
                 return null;
             }

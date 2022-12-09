@@ -9,6 +9,7 @@ interface SkyscraperProps {
   z?: number;
   id?: string;
   placementMode?: boolean;
+  rotationY?: number;
 }
 
 type GLTFResult = GLTF & {
@@ -24,7 +25,8 @@ function Skyscraper({
   x = 0,
   z = 0,
   id = 'SKYSCRAPER',
-  placementMode = false
+  placementMode = false,
+  rotationY = 0
 }: SkyscraperProps): JSX.Element {
   const height = 0;
 
@@ -49,7 +51,7 @@ function Skyscraper({
         castShadow
         receiveShadow
         geometry={nodes['6Story_Stack'].geometry}
-      >
+        rotation-y={rotationY}>
         {color != null ? (
           <meshBasicMaterial transparent opacity={0.5} color={color} />
         ) : (

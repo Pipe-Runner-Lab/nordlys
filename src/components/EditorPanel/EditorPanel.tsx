@@ -7,6 +7,7 @@ import BuildingPanel from '../BuildingPanel';
 import LandmarkPanel from '../LandmarkPanel';
 import LightPanel from '../LightPanel';
 import ShadowPanel from '../ShadowPanel';
+import SkyExposurePanel from '../SkyExposurePanel';
 
 const menuVariants = {
   open: {
@@ -56,6 +57,7 @@ function EditorPanel(): JSX.Element {
         {editMode === 'landmark' && <LandmarkPanel />}
         {editMode === 'light' && <LightPanel />}
         {editMode === 'shadow' && <ShadowPanel />}
+        {editMode === 'sky-exposure' && <SkyExposurePanel />}
       </div>
     </motion.div>
   );
