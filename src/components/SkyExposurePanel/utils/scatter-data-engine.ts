@@ -13,21 +13,34 @@ export function generateData(
 
 export function generateConfig(): object {
   return {
+    width: 320,
+    color: ({ exposure }: { exposure: number }) => {
+      const colors3 = ['rgb(252 165 165)', 'rgb(253 224 71)', 'rgb(190 242 100)'];
+      // custom colorMapping function
+      const idx = exposure < 25 ? 0 : exposure > 75 ? 2 : 1;
+      return colors3[idx];
+    },
     colorField: 'exposure',
     size: [8, 8],
     yAxis: {
-      nice: true,
-      line: {
-        style: {
-          stroke: '#aaa'
-        }
+      title: {
+        text: 'z'
       },
+      nice: true,
       max: 50,
       min: 0
     },
     xAxis: {
+      title: {
+        text: 'x'
+      },
       max: 50,
       min: 0
+    },
+    meta: {
+      exposure: {
+        type: 'linear'
+      }
     }
   };
 }

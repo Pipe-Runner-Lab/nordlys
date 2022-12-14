@@ -21,16 +21,23 @@ export const generateConfig = (): object => {
     height: 320,
     width: 320,
     xAxis: {
-      position: 'top'
+      position: 'top',
+      title: {
+        text: 'x'
+      }
     },
-    yAxis: {},
+    yAxis: {
+      title: {
+        text: 'z'
+      }
+    },
     color: [
-      'rgb(203 213 225)',
-      'rgb(148 163 184)',
-      'rgb(100 116 139)',
-      'rgb(71 85 105)',
-      'rgb(51 65 85)',
-      'rgb(30 41 59)'
+      'rgb(132 204 22)',
+      'rgb(163 230 53)',
+      'rgb(132 204 22)',
+      'rgb(252 165 165)',
+      'rgb(248 113 113)',
+      'rgb(239 68 68)'
     ]
   };
 };

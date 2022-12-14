@@ -32,7 +32,7 @@ function EditorPanel(): JSX.Element {
         type: 'tween'
       }}
       initial="closed"
-      className="absolute flex flex-col w-1/4 max-w-md bg-white rounded-md shadow-md min-w-sm top-2 bottom-2 right-2 backdrop-blur-sm bg-opacity-90">
+      className="absolute flex flex-col w-1/4 min-w-[360px] max-w-md bg-white rounded-md shadow-md min-w-sm top-2 bottom-2 right-2 backdrop-blur-sm bg-opacity-90">
       <AnimatePresence>
         {!isMenuOpen && (
           <motion.button
@@ -52,7 +52,7 @@ function EditorPanel(): JSX.Element {
 
       <div className="h-[1px] w-auto mx-2 bg-gray-300" />
 
-      <div className="flex flex-col flex-1">
+      <div className="flex flex-col flex-1 overflow-auto">
         {editMode === 'buildings' && <BuildingPanel />}
         {editMode === 'landmark' && <LandmarkPanel />}
         {editMode === 'light' && <LightPanel />}

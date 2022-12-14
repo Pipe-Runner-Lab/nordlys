@@ -89,14 +89,14 @@ function ShadowAnalyser({ y }: LightAnalyserProps): JSX.Element {
       </group>
 
       {lightMarkers.map((marker) => {
-        const color = marker.intensity > 0.1 ? 'green' : 'red';
+        const color = marker.intensity > 0.1 ? '#A3E635' : '#FCA5A5';
         return (
           <arrowHelper
             key={marker.id}
             args={[
               new Vector3(0, 2, 0),
               new Vector3(marker.x, y, marker.z),
-              50 * marker.intensity,
+              5 - (5 - 40) * marker.intensity,
               color,
               0,
               0

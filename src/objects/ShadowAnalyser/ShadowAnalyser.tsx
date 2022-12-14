@@ -79,7 +79,7 @@ function ShadowAnalyser(): JSX.Element {
               heatMap.push({
                 x: (idx % R) * subDivisionW + xAxisAdjustment,
                 z: Math.floor(idx / R) * subDivisionH + zAxisAdjustment,
-                value: value / maxValue
+                value: 1 - value / maxValue
               });
             });
             setShadowHeatMap(heatMap);

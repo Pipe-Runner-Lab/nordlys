@@ -77,7 +77,7 @@ function LightPanel(): JSX.Element {
           Light graph
         </div>
         <div className="flex items-end justify-center flex-1">
-          <Column height={260} data={barData} xField="position" yField="intensity" {...barConfig} />
+          <Column data={barData} xField="position" yField="intensity" {...barConfig} />
         </div>
       </div>
     </div>

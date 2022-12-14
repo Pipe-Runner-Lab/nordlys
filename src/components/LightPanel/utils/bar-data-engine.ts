@@ -11,6 +11,8 @@ export const generateData = (
 
 export const generateConfig = (): object => {
   return {
+    width: 320,
+    height: 260,
     label: {
       position: 'middle',
       style: {
@@ -26,7 +28,10 @@ export const generateConfig = (): object => {
     },
     yAxis: {
       max: 1,
-      min: 0
+      min: 0,
+      title: {
+        text: 'Intensity'
+      }
     }
   };
 };

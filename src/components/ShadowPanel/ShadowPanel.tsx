@@ -1,16 +1,27 @@
 import { Heatmap } from '@ant-design/plots';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import useStore from '../../store/store';
 import SimulationControls from '../SimulationControls';
 import { generateConfig, generateData } from './utils/heatmap-data-engine';
 
 function ShadowPanel(): JSX.Element {
   const simulationState = useStore((state) => state.simulationState);
+  const setSimulationState = useStore((state) => state.setSimulationState);
   const shadowHeatMap = useStore((state) => state.shadowHeatMap);
   const setShadowHeatMap = useStore((state) => state.setShadowHeatMap);
 
   const heatData = generateData(shadowHeatMap);
   const heatConfig = useMemo(() => generateConfig(), []);
+
+  useEffect(
+    // TODO: Double call for reset when simulation is stopped
+    () => () => {
+      if (simulationState === 'pause') {
+        setSimulationState('reset');
+      }
+    },
+    [simulationState]
+  );
 
   return (
     <div className='className="flex flex-col flex-1 p-2 space-y-2'>

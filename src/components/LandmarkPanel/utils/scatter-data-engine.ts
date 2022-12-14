@@ -24,6 +24,7 @@ export function generateData(
 
 export function generateConfig(): object {
   return {
+    width: 320,
     colorField: 'type',
     shapeField: 'type',
     size: [8, 8],
@@ -34,7 +35,7 @@ export function generateConfig(): object {
         case 'In Sight':
           return 'green';
         default:
-          return 'yellow';
+          return 'rgb(253 224 71)';
       }
     },
     shape: ({ type }: { type: string }) => {
@@ -48,6 +49,9 @@ export function generateConfig(): object {
       }
     },
     yAxis: {
+      title: {
+        text: 'z'
+      },
       nice: true,
       line: {
         style: {
@@ -58,6 +62,9 @@ export function generateConfig(): object {
       min: 0
     },
     xAxis: {
+      title: {
+        text: 'x'
+      },
       max: 50,
       min: 0
     }

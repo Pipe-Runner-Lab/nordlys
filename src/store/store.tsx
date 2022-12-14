@@ -3,7 +3,7 @@ import { defaultCity } from '../constants/defaultCity';
 
 // Editor state
 type EditModes = 'buildings' | 'landmark' | 'sky-exposure' | 'light' | 'shadow';
-type BuildingEditorMode = 'insert' | undefined;
+type BuildingEditorMode = 'insert' | 'move' | undefined;
 
 // Building Data
 export type BuildingType =

@@ -19,8 +19,9 @@ function Buildings({ y }: BuildingsProps, ref: React.Ref<Group>): JSX.Element | 
   const buildingDataMap = useStore((state) => state.buildingDataMap);
   const setSelected = useStore((state) => state.setSelected);
   const editMode = useStore((state) => state.editMode);
+  const isMenuOpen = useStore((state) => state.isMenuOpen);
 
-  const isSelectionActive = editMode === 'buildings' || editMode === 'landmark';
+  const isSelectionActive = isMenuOpen && (editMode === 'buildings' || editMode === 'landmark');
   const isMultiSelectActive = editMode === 'buildings';
 
   /**

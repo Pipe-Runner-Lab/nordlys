@@ -27,9 +27,11 @@ function Terrain({ y }: TerrainProps): JSX.Element {
   const addLightMarker = useStore((state) => state.addLightMarker);
   const skyMarkerMode = useStore((state) => state.skyMarkerMode);
   const addSkyMarker = useStore((state) => state.addSkyMarker);
+  const setBuildingEditorMode = useStore((state) => state.setBuildingEditorMode);
 
   const isInsertModeActive =
     isMenuOpen && buildingEditorMode === 'insert' && editMode === 'buildings';
+  const isMoveModeActive = isMenuOpen && buildingEditorMode === 'move' && editMode === 'buildings';
   const isLightModeActive = isMenuOpen && lightMarkerMode === 'insert' && editMode === 'light';
   const isSkyModeActive = isMenuOpen && skyMarkerMode === 'insert' && editMode === 'sky-exposure';
 
@@ -50,6 +52,10 @@ function Terrain({ y }: TerrainProps): JSX.Element {
           rotationY: (editorMark.rotationY ?? 0) - Math.PI / 2
         });
       }
+
+      if (code === 'KeyM' && isInsertModeActive) {
+        setBuildingEditorMode('move');
+      }
     };
 
     document.addEventListener('keyup', handleRotation, false);
@@ -57,7 +63,7 @@ function Terrain({ y }: TerrainProps): JSX.Element {
     return () => {
       document.removeEventListener('keyup', handleRotation, false);
     };
-  }, [isInsertModeActive, editorMark]);
+  }, [isInsertModeActive, isMoveModeActive, editorMark]);
 
   useEffect(() => {
     if (editorMarkRef.current != null) {
@@ -102,7 +108,7 @@ function Terrain({ y }: TerrainProps): JSX.Element {
 
   const handleClick = useCallback(
     ({ point: { x, z } }: ThreeEvent<MouseEvent>) => {
-      if (editorMarkRef.current != null && isInsertModeActive) {
+      if (isInsertModeActive) {
         editorMarkRef.current?.position.setX(x);
         editorMarkRef.current?.position.setZ(z);
         insertBuilding({
