@@ -159,12 +159,16 @@ function Terrain({ y }: TerrainProps): JSX.Element {
           id: uuidv4()
         });
 
-        if (isMoveModeActive) setBuildingEditorMode(undefined);
+        if (isMoveModeActive) {
+          setBuildingEditorMode(undefined);
+          setCacheBuildingDataMap(null);
+        }
         return;
       }
 
       if (isLightModeActive) {
         addLightMarker({ x, z, id: uuidv4(), intensity: 0 });
+        return;
       }
 
       if (isSkyModeActive) {

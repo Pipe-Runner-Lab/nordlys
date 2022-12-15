@@ -23,8 +23,6 @@ function BuildingPanel(): JSX.Element {
   const clearSelected = useStore((state) => state.clearSelected);
   const setEditorMark = useStore((state) => state.setEditorMark);
   const editorMark = useStore((state) => state.editorMark);
-  // const cacheBuildingDataMap = useStore((state) => state.cacheBuildingDataMap);
-  // const setCacheBuildingDataMap = useStore((state) => state.setCacheBuildingDataMap);
   const restoreBuildings = useStore((state) => state.restoreBuildings);
 
   const isMoveActive = buildingEditorMode === 'move';
@@ -38,13 +36,6 @@ function BuildingPanel(): JSX.Element {
       restoreBuildings();
     };
   }, []);
-
-  // INFO: Not needed since mode cannot be changed unless esc is pressed
-  // useEffect(() => {
-  //   if (!isMoveActive && cacheBuildingDataMap != null) {
-  //     restoreBuildings();
-  //   }
-  // }, [isMoveActive, cacheBuildingDataMap]);
 
   const deleteAll = (): void => {
     selected.forEach((id) => {
