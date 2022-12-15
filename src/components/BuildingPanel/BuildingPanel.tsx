@@ -23,13 +23,28 @@ function BuildingPanel(): JSX.Element {
   const clearSelected = useStore((state) => state.clearSelected);
   const setEditorMark = useStore((state) => state.setEditorMark);
   const editorMark = useStore((state) => state.editorMark);
+  // const cacheBuildingDataMap = useStore((state) => state.cacheBuildingDataMap);
+  // const setCacheBuildingDataMap = useStore((state) => state.setCacheBuildingDataMap);
+  const restoreBuildings = useStore((state) => state.restoreBuildings);
+
+  const isMoveActive = buildingEditorMode === 'move';
+  const isAddActive = buildingEditorMode === 'insert';
+  const isSelectedOne = selected != null && selected.length === 1;
 
   useEffect(() => {
     return () => {
       setBuildingEditorMode(undefined);
       clearSelected();
+      restoreBuildings();
     };
   }, []);
+
+  // INFO: Not needed since mode cannot be changed unless esc is pressed
+  // useEffect(() => {
+  //   if (!isMoveActive && cacheBuildingDataMap != null) {
+  //     restoreBuildings();
+  //   }
+  // }, [isMoveActive, cacheBuildingDataMap]);
 
   const deleteAll = (): void => {
     selected.forEach((id) => {
@@ -38,7 +53,7 @@ function BuildingPanel(): JSX.Element {
     clearSelected();
   };
 
-  const isDeleteActive = selected.length > 0;
+  const isDeleteActive = selected.length > 0 && !isMoveActive;
 
   return (
     <div className="p-2 space-y-2">
@@ -77,6 +92,24 @@ function BuildingPanel(): JSX.Element {
       </div>
 
       {/* If person selects something from table, we disable add mode */}
+      <div className="space-y-2">
+        {isSelectedOne && !isMoveActive && (
+          <div className="flex items-center justify-center p-4 text-blue-700 bg-blue-200 border border-blue-400 border-solid rounded-md border-1">
+            M : Move selected building
+          </div>
+        )}
+        {isMoveActive && (
+          <div className="flex items-center justify-center p-4 text-red-700 bg-red-200 border border-red-400 border-solid rounded-md border-1">
+            Esc : Cancel move
+          </div>
+        )}
+        {(isAddActive || isMoveActive) && (
+          <div className="flex flex-col items-center justify-center p-4 space-y-1 text-yellow-700 bg-yellow-200 border border-yellow-400 border-solid rounded-md border-1">
+            <div>Q : Rotate anticlockwise</div>
+            <div>E : Rotate clockwise</div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

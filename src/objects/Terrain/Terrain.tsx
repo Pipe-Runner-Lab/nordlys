@@ -17,6 +17,8 @@ function Terrain({ y }: TerrainProps): JSX.Element {
   const lightHelperRef = useRef<ArrowHelper>(null);
   const skyHelperRef = useRef<ArrowHelper>(null);
 
+  const cacheBuildingDataMap = useStore((state) => state.cacheBuildingDataMap);
+  const setCacheBuildingDataMap = useStore((state) => state.setCacheBuildingDataMap);
   const editMode = useStore((state) => state.editMode);
   const buildingEditorMode = useStore((state) => state.buildingEditorMode);
   const lightMarkerMode = useStore((state) => state.lightMarkerMode);
@@ -28,33 +30,66 @@ function Terrain({ y }: TerrainProps): JSX.Element {
   const skyMarkerMode = useStore((state) => state.skyMarkerMode);
   const addSkyMarker = useStore((state) => state.addSkyMarker);
   const setBuildingEditorMode = useStore((state) => state.setBuildingEditorMode);
+  const clearSelected = useStore((state) => state.clearSelected);
+  const buildingDataMap = useStore((state) => state.buildingDataMap);
+  const removeBuilding = useStore((state) => state.removeBuilding);
+  const restoreBuildings = useStore((state) => state.restoreBuildings);
 
   const isInsertModeActive =
     isMenuOpen && buildingEditorMode === 'insert' && editMode === 'buildings';
   const isMoveModeActive = isMenuOpen && buildingEditorMode === 'move' && editMode === 'buildings';
   const isLightModeActive = isMenuOpen && lightMarkerMode === 'insert' && editMode === 'light';
   const isSkyModeActive = isMenuOpen && skyMarkerMode === 'insert' && editMode === 'sky-exposure';
+  const selected = useStore((state) => state.selected);
+
+  const isMovable = selected != null && selected.length === 1;
 
   useEffect(() => {
     const handleRotation = (event: KeyboardEvent): void => {
       const code = event.code;
 
-      if (code === 'KeyQ' && isInsertModeActive) {
+      if (code === 'KeyQ' && (isInsertModeActive || isMoveModeActive)) {
         setEditorMark({
           ...editorMark,
           rotationY: (editorMark.rotationY ?? 0) + Math.PI / 2
         });
       }
 
-      if (code === 'KeyE' && isInsertModeActive) {
+      if (code === 'KeyE' && (isInsertModeActive || isMoveModeActive)) {
         setEditorMark({
           ...editorMark,
           rotationY: (editorMark.rotationY ?? 0) - Math.PI / 2
         });
       }
 
-      if (code === 'KeyM' && isInsertModeActive) {
-        setBuildingEditorMode('move');
+      if (code === 'KeyM' && isMovable) {
+        setCacheBuildingDataMap(buildingDataMap);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const building = buildingDataMap.find((building) => building.id === selected[0]!);
+        if (building != null) {
+          setEditorMark({
+            type: building?.type,
+            rotationY: building?.rotationY
+          });
+          removeBuilding(building.id);
+          setBuildingEditorMode('move');
+        }
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        editorMarkRef.current!.visible = true;
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        editorMarkRef.current!.position.x = building?.x ?? 0;
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        editorMarkRef.current!.position.z = building?.z ?? 0;
+      }
+
+      if (code === 'Escape' && isMoveModeActive) {
+        setBuildingEditorMode(undefined);
+        clearSelected();
+
+        if (cacheBuildingDataMap != null) {
+          restoreBuildings();
+          // setCacheBuildingDataMap(null);
+        }
       }
     };
 
@@ -63,13 +98,17 @@ function Terrain({ y }: TerrainProps): JSX.Element {
     return () => {
       document.removeEventListener('keyup', handleRotation, false);
     };
-  }, [isInsertModeActive, isMoveModeActive, editorMark]);
+  }, [isInsertModeActive, isMoveModeActive, editorMark, isMovable, selected, cacheBuildingDataMap]);
 
   useEffect(() => {
     if (editorMarkRef.current != null) {
       editorMarkRef.current.visible = false;
+
+      if (isMoveModeActive) {
+        editorMarkRef.current.visible = true;
+      }
     }
-  }, [isInsertModeActive]);
+  }, [isInsertModeActive, isMoveModeActive]);
 
   useEffect(() => {
     if (lightHelperRef.current != null) {
@@ -85,7 +124,7 @@ function Terrain({ y }: TerrainProps): JSX.Element {
 
   const handlePointerMove = useCallback(
     ({ point: { x, z } }: ThreeEvent<PointerEvent>) => {
-      if (editorMarkRef.current != null && isInsertModeActive) {
+      if (editorMarkRef.current != null && (isInsertModeActive || isMoveModeActive)) {
         editorMarkRef.current.visible = true;
         editorMarkRef.current.position.setX(x);
         editorMarkRef.current.position.setZ(z);
@@ -103,12 +142,12 @@ function Terrain({ y }: TerrainProps): JSX.Element {
         skyHelperRef.current.position.setZ(z);
       }
     },
-    [isLightModeActive, isInsertModeActive, isSkyModeActive]
+    [isLightModeActive, isInsertModeActive, isSkyModeActive, isMoveModeActive]
   );
 
   const handleClick = useCallback(
     ({ point: { x, z } }: ThreeEvent<MouseEvent>) => {
-      if (isInsertModeActive) {
+      if (isInsertModeActive || isMoveModeActive) {
         editorMarkRef.current?.position.setX(x);
         editorMarkRef.current?.position.setZ(z);
         insertBuilding({
@@ -120,6 +159,7 @@ function Terrain({ y }: TerrainProps): JSX.Element {
           id: uuidv4()
         });
 
+        if (isMoveModeActive) setBuildingEditorMode(undefined);
         return;
       }
 
@@ -131,11 +171,11 @@ function Terrain({ y }: TerrainProps): JSX.Element {
         addSkyMarker({ x, z, id: uuidv4(), exposure: 0 });
       }
     },
-    [editorMark, isLightModeActive, isInsertModeActive, isSkyModeActive]
+    [editorMark, isLightModeActive, isInsertModeActive, isSkyModeActive, isMoveModeActive]
   );
 
   const handlePointerOut = useCallback(() => {
-    if (editorMarkRef.current != null && isInsertModeActive) {
+    if (editorMarkRef.current != null && (isInsertModeActive || isMoveModeActive)) {
       editorMarkRef.current.visible = false;
     }
 
@@ -146,7 +186,7 @@ function Terrain({ y }: TerrainProps): JSX.Element {
     if (skyHelperRef.current != null && isSkyModeActive) {
       skyHelperRef.current.visible = false;
     }
-  }, [isLightModeActive, isInsertModeActive, isSkyModeActive]);
+  }, [isLightModeActive, isInsertModeActive, isSkyModeActive, isMoveModeActive]);
 
   return (
     <group>

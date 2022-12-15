@@ -13,3 +13,37 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+:root {
+  --sizing-s: 8px;
+  --spacing-xs: 4px;
+  --secondary-v1-base: 139, 92, 246;
+  --secondary-v1: rgba(var(--secondary-v1-base), 1);
+}
+
+/* https://webplatform.github.io/docs/css/mediaqueries */
+@media (hover: hover) and (pointer: fine) {
+  /* Custom Scrollbar - https://ishadeed.com/article/custom-scrollbars-css/ */
+  ::-webkit-scrollbar {
+    width: var(--sizing-s);
+    height: var(--sizing-s);
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: var(--scrollbar-track);
+    border-radius: 100px;
+    padding: calc(var(--spacing-xs) / 2);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--secondary-v1-base), 0.7);
+    border-radius: 100px;
+    box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5);
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(var(--secondary-v1-base), 1);
+  }
+}

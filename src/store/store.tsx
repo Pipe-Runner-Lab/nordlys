@@ -51,8 +51,11 @@ export interface SkyMarker {
 
 interface Store {
   buildingDataMap: BuildingData[];
+  cacheBuildingDataMap: BuildingData[] | null;
+  setCacheBuildingDataMap: (buildings: BuildingData[] | null) => void;
   insertBuilding: (args: BuildingData) => void;
   removeBuilding: (id: string) => void;
+  restoreBuildings: () => void;
   editMode: EditModes;
   setEditMode: (mode: EditModes) => void;
   editorMark: { type: BuildingType; rotationY?: number };
@@ -89,11 +92,19 @@ interface Store {
 
 const useStore = create<Store>((set) => ({
   buildingDataMap: defaultCity as BuildingData[],
+  cacheBuildingDataMap: null,
+  setCacheBuildingDataMap: (buildings: BuildingData[] | null) =>
+    set({ cacheBuildingDataMap: buildings }),
   insertBuilding: (building) =>
     set((state) => ({ buildingDataMap: [...state.buildingDataMap, building] })),
   removeBuilding: (id) =>
     set((state) => ({
       buildingDataMap: state.buildingDataMap.filter((building) => building.id !== id)
+    })),
+  restoreBuildings: () =>
+    set((state) => ({
+      buildingDataMap: state.cacheBuildingDataMap ?? state.buildingDataMap,
+      cacheBuildingDataMap: null
     })),
   editMode: 'buildings',
   setEditMode: (mode) => set({ editMode: mode }),
@@ -104,16 +115,18 @@ const useStore = create<Store>((set) => ({
   setIsMenuOpen: (isOpen) =>
     isOpen
       ? set({ isMenuOpen: isOpen })
-      : set({
+      : set((state) => ({
           isMenuOpen: isOpen,
           selected: [],
           blocked: [],
+          buildingDataMap: state.cacheBuildingDataMap ?? state.buildingDataMap,
+          cacheBuildingDataMap: null,
           buildingEditorMode: undefined,
           lightMarkerMode: undefined,
           skyMarkerMode: undefined,
           simulationState: 'reset',
           simulationProgress: 0
-        }),
+        })),
   buildingEditorMode: undefined,
   setBuildingEditorMode: (mode) => set({ buildingEditorMode: mode }),
   selected: [],

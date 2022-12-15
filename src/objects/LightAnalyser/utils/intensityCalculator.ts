@@ -25,7 +25,7 @@ export const getIntensity = (
 
       const imageData = ctx.getImageData(canvasX, canvasY, 1, 1);
       const c = imageData.data;
-      const intensity = (65536 * c[0] + 256 * c[1] + c[2]) / 256 / 256 / 256;
+      const intensity = (0.21 * c[0] + 0.72 * c[1] + 0.07 * c[2]) / 255;
       marker.intensity = intensity;
     });
 
