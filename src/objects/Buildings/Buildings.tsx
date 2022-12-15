@@ -20,9 +20,10 @@ function Buildings({ y }: BuildingsProps, ref: React.Ref<Group>): JSX.Element | 
   const setSelected = useStore((state) => state.setSelected);
   const editMode = useStore((state) => state.editMode);
   const isMenuOpen = useStore((state) => state.isMenuOpen);
+  const buildingEditorMode = useStore((state) => state.buildingEditorMode);
 
   const isSelectionActive = isMenuOpen && (editMode === 'buildings' || editMode === 'landmark');
-  const isMultiSelectActive = editMode === 'buildings';
+  const isMultiSelectActive = editMode === 'buildings' && buildingEditorMode !== 'move';
 
   /**
    * * The buildings are written in a way to be moved up by their height/2.
@@ -36,7 +37,10 @@ function Buildings({ y }: BuildingsProps, ref: React.Ref<Group>): JSX.Element | 
           multiple={isMultiSelectActive}
           onChange={
             isSelectionActive
-              ? (selected) => setSelected(selected.map(({ name }) => name))
+              ? (selected) =>
+                  !isMultiSelectActive && selected.length > 1
+                    ? undefined
+                    : setSelected(selected.map(({ name }) => name))
               : undefined
           }>
           {buildingDataMap.map(({ type, id, x, z, rotationY }) => {
